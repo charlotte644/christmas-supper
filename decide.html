@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<script src="shim.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Christmas Supper with the Warren Family">
+<meta property="og:description" content="Instead of presents this year, come and share a Christmas meal with us — pick your evening here.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where shall we eat?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #1b3a28; --pine-deep: #10261a; --berry: #8e1b2c; --berry-soft: #b23a48;
+    --gold: #c9a44c; --gold-light: #f1d98f; --cream: #fbf6ec; --parchment: #f4ead6;
+    --ink: #2a2320; --muted: #6d5f55;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Lato', system-ui, sans-serif; color: var(--ink);
+    background: radial-gradient(ellipse at 50% -10%, rgba(241,217,143,.18), transparent 55%),
+                radial-gradient(circle at 15% 85%, rgba(142,27,44,.35), transparent 45%),
+                linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 32px 16px 48px; }
+  header { text-align: center; color: var(--cream); margin-bottom: 20px; }
+  .eyebrow { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light); }
+  h1 { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(44px, 11vw, 66px); margin: 6px 0 0; line-height: 1; }
+  .card {
+    background: var(--cream); border-radius: 18px; padding: 26px 22px; border: 2px solid var(--gold);
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 0 0 6px var(--cream), inset 0 0 0 7px rgba(201,164,76,.45);
+  }
+  .lead { font-family: 'Cormorant Garamond', serif; font-size: 20px; line-height: 1.5; text-align: center; margin: 0 0 16px; }
+  .loading { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--muted); padding: 20px 0; }
+  .error { background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+
+  /* progress dots */
+  .dots { display: flex; justify-content: center; gap: 7px; margin: 10px 0 14px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; background: #e3d4ae; display: block; }
+  .dots i.done { background: var(--gold); }
+  .dots i.now { background: var(--berry); transform: scale(1.25); }
+  .count { text-align: center; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+
+  .question { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 27px; line-height: 1.25; text-align: center; color: var(--pine); margin: 8px 0 6px; }
+  .q-emoji { font-size: 44px; text-align: center; margin-top: 6px; }
+  .left { text-align: center; font-size: 13px; color: var(--muted); margin: 0 0 18px; }
+  .yn { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn {
+    display: block; width: 100%; cursor: pointer; font: inherit; font-weight: 700; font-size: 17px;
+    padding: 15px 18px; border-radius: 999px; border: 2px solid var(--berry);
+    background: linear-gradient(180deg, var(--berry-soft), var(--berry)); color: var(--cream);
+    box-shadow: 0 8px 18px rgba(142,27,44,.3);
+  }
+  .btn.outline { background: #fff; color: var(--berry); box-shadow: none; }
+  .btn.green { background: var(--pine); border-color: var(--pine); box-shadow: 0 8px 18px rgba(27,58,40,.3); }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .link { display: block; margin: 14px auto 0; background: none; border: 0; color: var(--berry); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; }
+
+  /* result */
+  .match-label { text-align: center; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--berry); font-weight: 700; }
+  .venue { background: #fff; border: 2px solid var(--gold); border-radius: 14px; padding: 16px; margin: 10px 0 16px; text-align: center; }
+  .v-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 28px; color: var(--pine); line-height: 1.15; }
+  .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin: 8px 0; }
+  .tags span { background: var(--parchment); color: var(--berry); font-size: 12px; font-weight: 700; border-radius: 6px; padding: 3px 8px; }
+  .v-meta { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .v-meta a { color: var(--berry); font-weight: 700; }
+  .stack { display: grid; gap: 10px; }
+  .done { text-align: center; }
+  .done .big { font-size: 52px; }
+  .done p { font-family: 'Cormorant Garamond', serif; font-size: 21px; line-height: 1.5; margin: 8px 0; }
+  .hidden { display: none !important; }
+
+  @media (max-width: 520px) {
+    .wrap { padding: 24px 12px 40px; }
+    .card { padding: 20px 16px; }
+    .question { font-size: 24px; }
+    .v-name { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+<div id="ctx" data-id="<?= bookingId ?>" data-key="<?= key ?>" hidden></div>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Christmas Supper</div>
+    <h1>Where shall we eat?</h1>
+  </header>
+
+  <section class="card">
+    <div id="error" class="error hidden" role="alert"></div>
+    <div id="loading" class="loading">Finding places between us…</div>
+
+    <!-- Intro -->
+    <div id="intro" class="hidden">
+      <p class="lead" id="introText"></p>
+      <button class="btn" id="startBtn" type="button">Let’s go! 🎄</button>
+    </div>
+
+    <!-- A question -->
+    <div id="ask" class="hidden">
+      <div class="count" id="count"></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="q-emoji" id="qEmoji" aria-hidden="true"></div>
+      <div class="question" id="question" aria-live="polite"></div>
+      <p class="left" id="left"></p>
+      <div class="yn">
+        <button class="btn" id="yesBtn" type="button">Yes</button>
+        <button class="btn outline" id="noBtn" type="button">No</button>
+      </div>
+      <button class="link" id="restartBtn" type="button">Start again</button>
+    </div>
+
+    <!-- The match -->
+    <div id="result" class="hidden">
+      <div class="match-label" id="matchLabel">Your perfect match</div>
+      <div class="venue">
+        <div class="v-name" id="vName"></div>
+        <div class="tags" id="vTags"></div>
+        <div class="v-meta" id="vAddress"></div>
+        <div class="v-meta" id="vDistance"></div>
+        <div class="v-meta" id="vLinks"></div>
+      </div>
+      <div class="stack">
+        <button class="btn green" id="pickBtn" type="button">Perfect — let’s go here! ✦</button>
+        <button class="btn outline" id="anotherBtn" type="button">Show me another</button>
+      </div>
+      <button class="link" id="restartBtn2" type="button">Start the questions again</button>
+    </div>
+
+    <!-- Finished / nothing to do -->
+    <div id="done" class="done hidden">
+      <div class="big" id="doneIcon" aria-hidden="true"></div>
+      <p id="doneText"></p>
+      <p style="font-size:17px;color:var(--muted)" id="doneSub"></p>
+    </div>
+  </section>
+</div>
+
+<script>
+  var ctx = document.getElementById('ctx').dataset;
+  // The GitHub copy of this page gets the booking from its own link instead.
+  if (!ctx.id || ctx.id.indexOf('<?') === 0) {
+    var qs = new URLSearchParams(location.search);
+    ctx = { id: qs.get('decide') || '', key: qs.get('key') || '' };
+  }
+  var isLive = typeof google !== 'undefined' && google.script && google.script.run;
+
+  var mock = {
+    getDecideData: function () {
+      return { name: 'Jo Smith', date: 'Thursday 10 December 2026', time: '6pm', party: '2 adults and 1 child', postcode: 'CF10 1AA',
+        cancelled: '', atOurs: false, chosen: '', noticeOk: true, noticeDays: 3, hosts: 'The Warren Family' };
+    },
+    findVenues: function () {
+      var s = [['The Holly Bush', ['Pub', 'British']], ['Shamrat', ['Indian']], ['La Luna', ['Italian', 'Pizza']],
+        ['Golden Dragon', ['Chinese']], ['The Elm Tree Inn', ['Pub']], ['Bella Napoli', ['Italian']], ['Spice Garden', ['Indian']],
+        ['The Old Barn', ['British', 'Steakhouse']], ['Thai Orchid', ['Thai']], ['El Toro', ['Spanish']], ['The Coach & Horses', ['Pub', 'British']],
+        ['Burger Shack', ['Burgers', 'American']], ['Olive Grove', ['Greek']], ['The Fox', ['Pub']], ['Masala Lounge', ['Indian']]];
+      return { postcode: 'CF10 1AA', milesApart: 12.4, venues: s.map(function (x, i) {
+        return { name: x[0], cuisines: x[1], address: (10 + i) + ' High Street, Castleton', website: i % 3 ? '' : 'https://example.com',
+          lat: 51.53, lng: -3.05, fromYou: +(4 + (i * 0.7) % 6).toFixed(1), fromUs: +(8 - (i * 0.5) % 6).toFixed(1) };
+      }) };
+    },
+    pinVenue: function (id, key, v) { return { venue: v.name, date: 'Thursday 10 December 2026' }; }
+  };
+
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      if (!isLive) return setTimeout(function () { resolve(mock[fn].apply(null, args)); }, 400);
+      var runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+      runner[fn].apply(runner, args);
+    });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function cleanError(err) { return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, ''); }
+  function showError(err) { $('error').textContent = cleanError(err); $('error').classList.remove('hidden'); }
+  function show(id) {
+    ['loading', 'intro', 'ask', 'result', 'done'].forEach(function (s) { $(s).classList.toggle('hidden', s !== id); });
+  }
+  function finish(icon, text, sub) {
+    $('doneIcon').textContent = icon; $('doneText').textContent = text; $('doneSub').textContent = sub || ''; show('done');
+  }
+
+  // ---------- the questions ----------
+  // Each question splits the places into "yes" and "no". We always ask the one that splits
+  // what's left most evenly, so 7 questions can narrow ~60 places down to one.
+  function hasAny(v, list) {
+    return v.cuisines.some(function (c) { return list.indexOf(c) !== -1; });
+  }
+  var MAX_QUESTIONS = 7;
+  var BANK = [
+    { emoji: '🍺', q: 'Fancy a cosy pub for the evening?', test: function (v) { return hasAny(v, ['Pub']); } },
+    { emoji: '🌶️', q: 'Do you enjoy a curry or something spicy?', test: function (v) { return hasAny(v, ['Indian', 'Pakistani', 'Bangladeshi', 'Nepalese', 'Sri Lankan', 'Thai', 'Curry', 'Balti']); } },
+    { emoji: '🍝', q: 'In the mood for Italian — pasta or pizza?', test: function (v) { return hasAny(v, ['Italian', 'Pizza']); } },
+    { emoji: '🥢', q: 'How about Chinese or other Asian food?', test: function (v) { return hasAny(v, ['Chinese', 'Japanese', 'Noodle', 'Asian', 'Vietnamese', 'Korean', 'Thai', 'Sushi', 'Cantonese', 'Malaysian']); } },
+    { emoji: '🥧', q: 'Would a traditional British meal hit the spot?', test: function (v) { return hasAny(v, ['British', 'Roast', 'Fish & chips', 'Welsh', 'English', 'Pie']); } },
+    { emoji: '🥩', q: 'Steak, burgers or something from the grill?', test: function (v) { return hasAny(v, ['Steakhouse', 'Burgers', 'American', 'Grill', 'Barbecue', 'Chicken']); } },
+    { emoji: '🫒', q: 'Somewhere Mediterranean — Greek, Spanish or Turkish?', test: function (v) { return hasAny(v, ['Greek', 'Spanish', 'Turkish', 'Mediterranean', 'Lebanese', 'Middle Eastern', 'Portuguese', 'Kebab']); } },
+    { emoji: '🚗', q: 'Would you rather it was a bit closer to you than to us?', test: function (v) { return v.fromYou < v.fromUs; } },
+    { emoji: '📍', dynamic: 'distance' },
+    { emoji: '📖', q: 'Would you like somewhere with its menu online, so you can have a look first?', test: function (v) { return /^https?:\/\//i.test(v.website || ''); } }
+  ];
+
+  var state = { booking: null, all: [], left: [], used: [], answers: [], asked: 0, current: null, results: [], shown: 0 };
+
+  function median(nums) {
+    var s = nums.slice().sort(function (a, b) { return a - b; });
+    return s.length ? s[Math.floor(s.length / 2)] : 0;
+  }
+
+  function materialise(item) {
+    if (item.dynamic !== 'distance') return item;
+    var miles = Math.max(1, Math.round(median(state.left.map(function (v) { return v.fromYou; }))));
+    return { emoji: item.emoji, q: 'Is it important it’s within about ' + miles + (miles === 1 ? ' mile' : ' miles') + ' of you?',
+      test: function (v) { return v.fromYou <= miles; }, key: 'distance' };
+  }
+
+  function nextQuestion() {
+    var n = state.left.length;
+    var best = null;
+    BANK.forEach(function (item, i) {
+      if (state.used.indexOf(i) !== -1) return;
+      var q = materialise(item);
+      var yes = state.left.filter(q.test).length;
+      if (yes === 0 || yes === n) return;            // doesn't help narrow things down
+      var score = Math.abs(yes - n / 2);
+      if (!best || score < best.score) best = { i: i, q: q, score: score };
+    });
+    return best;
+  }
+
+  function ask() {
+    if (state.asked >= MAX_QUESTIONS || state.left.length <= 1) return showResults();
+    var next = nextQuestion();
+    if (!next) return showResults();
+    state.current = next;
+    state.used.push(next.i);
+    $('count').textContent = 'Question ' + (state.asked + 1) + ' of up to ' + MAX_QUESTIONS;
+    $('dots').innerHTML = '';
+    for (var d = 0; d < MAX_QUESTIONS; d++) {
+      var dot = document.createElement('i');
+      if (d < state.asked) dot.className = 'done'; else if (d === state.asked) dot.className = 'now';
+      $('dots').appendChild(dot);
+    }
+    $('qEmoji').textContent = next.q.emoji;
+    $('question').textContent = next.q.q;
+    $('left').textContent = state.left.length + ' places still in the running';
+    show('ask');
+  }
+
+  function answer(yes) {
+    var q = state.current.q;
+    state.left = state.left.filter(function (v) { return q.test(v) === yes; });
+    state.answers.push(q.q + ' — ' + (yes ? 'Yes' : 'No'));
+    state.asked++;
+    ask();
+  }
+
+  function showResults() {
+    // Fairest first: the list already comes sorted by least total travel and the most even split.
+    // Their matches first, then everywhere else between us, so "Show me another" never runs dry.
+    state.matches = state.left.length;
+    state.results = state.left.concat(state.all.filter(function (v) { return state.left.indexOf(v) === -1; }));
+    state.shown = 0;
+    renderResult();
+    show('result');
+  }
+
+  function renderResult() {
+    var v = state.results[state.shown];
+    $('matchLabel').textContent = state.shown === 0 ? (state.matches === 1 ? 'Your perfect match' : 'Your best match')
+      : state.shown < state.matches ? 'Another good match' : 'Something a little different';
+    $('vName').textContent = v.name;
+    $('vTags').innerHTML = '';
+    v.cuisines.forEach(function (c) { var s = document.createElement('span'); s.textContent = c; $('vTags').appendChild(s); });
+    $('vAddress').textContent = v.address || '';
+    $('vDistance').textContent = v.fromYou + ' miles from you · ' + v.fromUs + ' miles from us';
+    $('vLinks').innerHTML = '';
+    var map = document.createElement('a');
+    map.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.lat + ',' + v.lng);
+    map.target = '_blank'; map.rel = 'noopener'; map.textContent = 'See it on a map ↗';
+    $('vLinks').appendChild(map);
+    if (/^https?:\/\//i.test(v.website || '')) {
+      $('vLinks').appendChild(document.createTextNode(' · '));
+      var site = document.createElement('a');
+      site.href = v.website; site.target = '_blank'; site.rel = 'noopener'; site.textContent = 'Their website ↗';
+      $('vLinks').appendChild(site);
+    }
+    var moreMatches = state.matches - 1 - state.shown;
+    $('anotherBtn').textContent = moreMatches > 0 ? 'Show me another match (' + moreMatches + ' more)'
+      : state.shown < state.results.length - 1 ? 'Show me something else' : 'Back to the first one';
+  }
+
+  function restart() {
+    state.left = state.all.slice(); state.used = []; state.answers = []; state.asked = 0;
+    $('error').classList.add('hidden');
+    ask();
+  }
+
+  // ---------- start ----------
+  call('getDecideData', ctx.id, ctx.key).then(function (b) {
+    state.booking = b;
+    var first = b.name.split(/\s+/)[0];
+    if (b.cancelled) return finish('🕯️', 'This booking was cancelled.', 'You’re very welcome to book another evening from the invitation.');
+    if (b.chosen) return finish('🍽️', 'You’ve already picked ' + b.chosen + '!', 'We’ll book the table and confirm by email.');
+    if (b.atOurs) return finish('🏡', 'You’re coming to ours — no restaurant needed!', '');
+    if (!b.noticeOk) return finish('📞', 'Your evening is coming up soon!', 'It’s too close to book a restaurant online now, so we’ll be in touch about where we’re eating.');
+    $('introText').textContent = 'Hello ' + first + '! Answer up to ' + MAX_QUESTIONS +
+      ' quick yes/no questions and we’ll find a place roughly halfway between us for ' + b.date.replace(/ \d{4}$/, '') + '.';
+    return call('findVenues', b.postcode).then(function (res) {
+      if (!res.venues || !res.venues.length) {
+        return finish('🗺️', 'We couldn’t find places between us just now.', 'No problem — we’ll be in touch about where we’re eating.');
+      }
+      state.all = res.venues;
+      state.left = res.venues.slice();
+      show('intro');
+    });
+  }).catch(function (err) {
+    show('done');
+    $('doneIcon').textContent = '⚠️';
+    showError(err);
+  });
+
+  $('startBtn').addEventListener('click', ask);
+  $('yesBtn').addEventListener('click', function () { answer(true); });
+  $('noBtn').addEventListener('click', function () { answer(false); });
+  $('restartBtn').addEventListener('click', restart);
+  $('restartBtn2').addEventListener('click', restart);
+  $('anotherBtn').addEventListener('click', function () {
+    state.shown = (state.shown + 1) % state.results.length;
+    renderResult();
+  });
+  $('pickBtn').addEventListener('click', function () {
+    var v = state.results[state.shown];
+    var btn = $('pickBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving your choice…';
+    $('error').classList.add('hidden');
+    call('pinVenue', ctx.id, ctx.key, {
+      name: v.name, address: v.address, cuisine: v.cuisines.join(', '), website: v.website || '',
+      phone: v.phone || '', lat: v.lat, lng: v.lng
+    }, state.answers).then(function (res) {
+      finish('🎉', 'Lovely — ' + res.venue + ' it is!',
+        'We’ll book the table for ' + res.date + ' and email you as soon as it’s confirmed.');
+    }).catch(function (err) {
+      showError(err);
+      btn.disabled = false;
+      btn.textContent = 'Perfect — let’s go here! ✦';
+    });
+  });
+</script>
+</body>
+</html>

@@ -153,6 +153,7 @@
         <button class="btn" id="showMove" type="button">📅 Change the date</button>
         <button class="btn outline" id="showEdit" type="button">✏️ Update my details</button>
         <button class="btn outline hidden" id="showMenu" type="button">🍽️ Menu choices</button>
+        <a class="btn hidden" id="decideLink" href="#" style="text-align:center;text-decoration:none">🍽️ Help us pick where to eat</a>
         <button class="btn outline" id="showCancel" type="button">Cancel booking</button>
       </div>
     </div>
@@ -343,6 +344,8 @@
     if (b.offeredStay) row('Staying over', b.stayOver ? 'Yes 🛏️' : 'No');
     if (b.awaitingApproval) row('Status', 'We’ll confirm with you very soon, along with our address.');
     $('showMenu').classList.toggle('hidden', !b.venue);
+    $('decideLink').classList.toggle('hidden', !b.decideUrl);
+    if (b.decideUrl) $('decideLink').href = b.decideUrl;
     $('monthLabel').textContent = 'December ' + b.calendar.year + ' · evenings from ' + b.calendar.startLabel;
     $('cancelText').textContent = 'This will cancel your supper on ' + b.date + ' and let ' + b.calendar.hosts +
       ' know. If you’d rather keep it but on another night, choose “Change the date” instead.';
