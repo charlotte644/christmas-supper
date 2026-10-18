@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<script src="shim.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Christmas Supper with the Warren Family">
+<meta property="og:description" content="Instead of presents this year, come and share a Christmas meal with us — pick your evening here.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Christmas Supper with Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #1b3a28;
+    --pine-deep: #10261a;
+    --berry: #8e1b2c;
+    --berry-soft: #b23a48;
+    --gold: #c9a44c;
+    --gold-light: #f1d98f;
+    --cream: #fbf6ec;
+    --parchment: #f4ead6;
+    --ink: #2a2320;
+    --muted: #6d5f55;
+    --taken: #d9cfbf;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    font-family: 'Lato', system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(241,217,143,.18), transparent 55%),
+      radial-gradient(circle at 15% 85%, rgba(142,27,44,.35), transparent 45%),
+      linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  /* ---------- snow ---------- */
+  .snow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .flake {
+    position: absolute; top: -10px; color: #fff; opacity: .8;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translate(0, -10px) rotate(0deg); }
+    100% { transform: translate(40px, 105vh) rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .flake { display: none; } }
+
+  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 40px 16px 56px; }
+
+  /* ---------- header ---------- */
+  header { text-align: center; color: var(--cream); margin-bottom: 28px; }
+  .bunting { font-size: 22px; letter-spacing: 10px; color: var(--gold); margin-bottom: 10px; }
+  .eyebrow {
+    font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light);
+  }
+  h1 {
+    font-family: 'Great Vibes', cursive; font-weight: 400;
+    font-size: clamp(56px, 13vw, 96px); line-height: 1; margin: 8px 0 0;
+    color: var(--cream); text-shadow: 0 2px 18px rgba(241,217,143,.35);
+  }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(20px, 4.5vw, 26px); color: var(--gold-light); margin-top: 4px;
+  }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--cream); border-radius: 18px; padding: 28px 24px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 0 0 6px var(--cream), inset 0 0 0 7px rgba(201,164,76,.45);
+    margin-bottom: 22px;
+  }
+  .card h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 700; color: var(--berry);
+    font-size: 28px; margin: 0 0 6px; text-align: center;
+  }
+  .lead {
+    font-family: 'Cormorant Garamond', serif; font-size: 21px; line-height: 1.5;
+    text-align: center; margin: 0 auto; max-width: 560px;
+  }
+  .lead em { color: var(--berry); }
+  .divider { text-align: center; color: var(--gold); letter-spacing: 8px; margin: 18px 0; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 6px; }
+  .step { text-align: center; padding: 6px; }
+  .step .icon { font-size: 30px; }
+  .step strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 19px; color: var(--pine); margin-top: 4px; }
+  .step span { font-size: 14px; color: var(--muted); }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+
+  .gift-note {
+    display: flex; gap: 12px; align-items: flex-start; margin-top: 18px; padding: 12px 16px;
+    background: var(--parchment); border: 1px dashed var(--gold); border-radius: 12px;
+    font-size: 14px; color: var(--muted); line-height: 1.5;
+  }
+  .gift-note .icon { font-size: 22px; line-height: 1.2; }
+  .gift-note strong { color: var(--pine); }
+  .gift-note .bank { display: block; margin-top: 2px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .gift-note .bank b { color: var(--berry); }
+
+  /* ---------- calendar ---------- */
+  .month { text-align: center; font-family: 'Cormorant Garamond', serif; color: var(--muted); font-size: 18px; margin-bottom: 18px; }
+  .weekdays, .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .weekdays div {
+    text-align: center; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; padding-bottom: 4px;
+  }
+  .day {
+    aspect-ratio: 1 / 1.05; border-radius: 12px; border: 1.5px solid var(--gold);
+    background: #fff; cursor: pointer; font: inherit; color: var(--ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+    padding: 0;
+  }
+  .day .num { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: clamp(20px, 5vw, 28px); line-height: 1; }
+  .day .tag { font-size: 11px; color: var(--pine); font-weight: 700; letter-spacing: .5px; }
+  .day:hover:not(:disabled), .day:focus-visible {
+    transform: translateY(-2px); background: var(--parchment);
+    box-shadow: 0 6px 14px rgba(142,27,44,.18); outline: none;
+  }
+  .day.selected { background: var(--berry); border-color: var(--berry); color: var(--cream); box-shadow: 0 8px 18px rgba(142,27,44,.4); }
+  .day.selected .tag { color: var(--gold-light); }
+  .day:disabled { cursor: not-allowed; background: var(--taken); border-color: var(--taken); color: var(--muted); opacity: .75; }
+  .day:disabled .num { text-decoration: line-through; text-decoration-color: var(--berry-soft); }
+  .day:disabled .tag { color: var(--muted); font-weight: 400; }
+  .blank { aspect-ratio: 1 / 1.05; }
+  @media (max-width: 420px) { .weekdays, .grid { gap: 5px; } .day { border-radius: 9px; } .day .tag { font-size: 9px; } }
+
+  .legend { display: flex; justify-content: center; gap: 20px; margin-top: 18px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -2px; margin-right: 6px; }
+  .legend .free { background: #fff; border: 1.5px solid var(--gold); }
+  .legend .chosen { background: var(--berry); }
+  .legend .gone { background: var(--taken); }
+
+  .loading { text-align: center; padding: 30px 0; color: var(--muted); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 20px; }
+
+  /* ---------- form ---------- */
+  .chosen-banner {
+    text-align: center; background: var(--parchment); border: 1px dashed var(--gold);
+    border-radius: 12px; padding: 12px; margin-bottom: 20px;
+    font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--pine);
+  }
+  .chosen-banner strong { color: var(--berry); }
+  .field { margin-bottom: 16px; }
+  .row { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; gap: 0; } }
+  label { display: block; font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 6px; }
+  label small { font-weight: 400; color: var(--muted); }
+  input, select, textarea {
+    width: 100%; font: inherit; font-size: 16px; color: var(--ink);
+    padding: 12px 14px; border-radius: 10px; border: 1.5px solid #d8c9a6; background: #fff;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--berry); box-shadow: 0 0 0 3px rgba(142,27,44,.15); }
+  textarea { min-height: 90px; resize: vertical; }
+  .btn {
+    display: block; width: 100%; border: 0; cursor: pointer;
+    background: linear-gradient(180deg, var(--berry-soft), var(--berry));
+    color: var(--cream); font: inherit; font-weight: 700; font-size: 17px; letter-spacing: .5px;
+    padding: 15px 20px; border-radius: 999px; box-shadow: 0 8px 18px rgba(142,27,44,.35);
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.06); }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .btn-ghost {
+    background: none; border: 0; color: var(--berry); text-decoration: underline; cursor: pointer;
+    font: inherit; font-size: 14px; display: block; margin: 14px auto 0;
+  }
+  .error {
+    background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 16px; font-size: 15px;
+  }
+  .fine { text-align: center; font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+  /* ---------- venues ---------- */
+  .venue-box {
+    border: 1.5px solid #e3d4ae; background: #fffdf8; border-radius: 14px;
+    padding: 16px; margin-bottom: 16px;
+  }
+  .venue-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .venue-head .icon { font-size: 24px; line-height: 1; }
+  .venue-head strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 21px; color: var(--pine); }
+  .venue-head span { font-size: 14px; color: var(--muted); }
+  .postcode-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .postcode-row input { flex: 1; text-transform: uppercase; min-width: 0; }
+  .postcode-row input::placeholder { text-transform: none; }
+  .btn-small { width: auto; flex: none; padding: 12px 20px; font-size: 15px; }
+  .loading.small { font-size: 18px; padding: 12px 0; }
+  .venue-summary { font-family: 'Cormorant Garamond', serif; font-size: 19px; text-align: center; margin: 4px 0 12px; color: var(--pine); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .chip {
+    border: 1.5px solid var(--gold); background: #fff; color: var(--pine); border-radius: 999px;
+    padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .chip span { font-weight: 400; color: var(--muted); }
+  .chip[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--cream); }
+  .chip[aria-pressed="true"] span { color: var(--gold-light); }
+  .venue-list { max-height: 380px; overflow-y: auto; display: grid; gap: 8px; padding: 2px 4px 2px 0; }
+  .venue {
+    display: flex; gap: 12px; align-items: flex-start; cursor: pointer;
+    background: #fff; border: 1.5px solid #e3d4ae; border-radius: 12px; padding: 12px 14px;
+    font-weight: 400; color: var(--ink); margin: 0;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .venue:hover { border-color: var(--gold); }
+  .venue input { width: auto; margin: 4px 0 0; accent-color: var(--berry); flex: none; }
+  .venue:has(input:checked) { border-color: var(--berry); background: #fdf3f3; box-shadow: 0 0 0 2px rgba(142,27,44,.15); }
+  .venue > div { flex: 1; min-width: 0; }
+  .v-name { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 19px; color: var(--pine); line-height: 1.2; }
+  .v-tags { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+  .v-tags span { background: var(--parchment); color: var(--berry); font-size: 11px; font-weight: 700; border-radius: 6px; padding: 2px 7px; }
+  .v-meta { font-size: 13px; color: var(--muted); }
+  .v-meta a { color: var(--berry); font-weight: 700; }
+  .venue.undecided { margin-top: 10px; background: var(--parchment); border-style: dashed; }
+  .venue.ours { margin-top: 14px; background: #f3f8f1; border-color: #a9c4a0; }
+  .venue.ours:has(input:checked) { border-color: var(--pine); background: #e7f1e3; box-shadow: 0 0 0 2px rgba(27,58,40,.15); }
+  .stay {
+    margin: 8px 0 0 30px; padding: 12px 14px; border-radius: 12px;
+    background: #fff; border: 1.5px dashed var(--pine);
+  }
+  .stay-q { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 19px; color: var(--pine); margin-bottom: 8px; }
+  .stay-opts { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .stay-opts label { display: flex; align-items: center; gap: 8px; font-weight: 400; color: var(--ink); margin: 0; font-size: 15px; cursor: pointer; }
+  .stay-opts input { width: auto; margin: 0; accent-color: var(--pine); }
+  @media (max-width: 420px) { .stay { margin-left: 0; } }
+  .stay textarea { min-height: 70px; margin: 0; }
+  .stay-wide { margin-left: 0; margin-top: 14px; border-color: var(--berry); }
+  .stay-wide .stay-q { color: var(--berry); }
+  .stay-note { font-size: 14px; color: var(--muted); margin: -2px 0 10px; }
+  .travel-note { font-size: 14px; color: var(--pine); margin: -4px 0 12px; }
+  .row-even { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .credit { font-size: 12px; color: var(--muted); text-align: center; margin: 10px 0 0; }
+  .credit a { color: var(--muted); }
+  .empty { text-align: center; color: var(--muted); font-style: italic; padding: 12px; }
+  @media (max-width: 420px) { .postcode-row { flex-direction: column; } .btn-small { width: 100%; } }
+
+  /* ---------- success ---------- */
+  .success { text-align: center; }
+  .success .big { font-size: 54px; }
+  .success h2 { font-size: 34px; }
+  .success p { font-family: 'Cormorant Garamond', serif; font-size: 21px; line-height: 1.5; margin: 8px 0; }
+  .success .when { color: var(--berry); font-weight: 700; }
+
+  /* ---------- music ---------- */
+  .music {
+    position: fixed; right: 16px; bottom: 16px; z-index: 5; max-width: calc(100vw - 32px);
+    display: flex; align-items: center; gap: 10px; cursor: pointer; text-align: left;
+    background: rgba(16,38,26,.92); color: var(--cream); border: 1.5px solid var(--gold);
+    border-radius: 999px; padding: 8px 16px 8px 10px; font: inherit;
+    box-shadow: 0 8px 22px rgba(0,0,0,.35); backdrop-filter: blur(4px);
+  }
+  .music:hover { border-color: var(--gold-light); }
+  .music-icon {
+    width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center;
+    background: var(--berry); font-size: 16px;
+  }
+  .music[aria-pressed="true"] .music-icon { animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(241,217,143,.18); } }
+  @media (prefers-reduced-motion: reduce) { .music[aria-pressed="true"] .music-icon { animation: none; } }
+  .music-text { display: flex; flex-direction: column; min-width: 0; }
+  .music-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .music-credit { font-size: 11px; color: var(--gold-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .music-credit:empty { display: none; }
+  .wrap { padding-bottom: 96px; }
+
+  footer { text-align: center; color: var(--gold-light); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 19px; margin-top: 10px; }
+  /* ---------- copy buttons (Sam's ISA) ---------- */
+  .gift-note .bank { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .copy {
+    font: inherit; font-size: 13px; color: var(--ink); cursor: pointer;
+    background: #fff; border: 1px solid #e3d4ae; border-radius: 8px; padding: 4px 6px 4px 10px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .copy b { color: var(--berry); font-variant-numeric: tabular-nums; }
+  .copy i {
+    font-style: normal; font-size: 11px; font-weight: 700; color: var(--cream); background: var(--pine);
+    border-radius: 5px; padding: 2px 6px;
+  }
+  .copy.copied i { background: var(--berry); }
+
+  /* ---------- progress steps ---------- */
+  .progress { position: sticky; top: 8px; z-index: 4; margin: 0 0 18px; }
+  .progress ol {
+    list-style: none; margin: 0 auto; padding: 6px; display: flex; gap: 4px; max-width: 560px;
+    background: rgba(16,38,26,.88); border: 1px solid rgba(201,164,76,.6); border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+  .progress li {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center;
+    font-size: 13px; color: rgba(251,246,236,.65); padding: 6px 4px; border-radius: 999px; white-space: nowrap;
+  }
+  .progress li span {
+    width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; flex: none;
+    font-size: 11px; font-weight: 700; border: 1px solid rgba(241,217,143,.6);
+  }
+  .progress li.done { color: var(--gold-light); }
+  .progress li.done span { background: var(--gold); color: var(--pine-deep); border-color: var(--gold); }
+  .progress li.active { background: var(--berry); color: var(--cream); font-weight: 700; }
+  .progress li.active span { background: var(--cream); color: var(--berry); border-color: var(--cream); }
+  @media (max-width: 480px) { .progress li { font-size: 11px; gap: 4px; } }
+
+  /* ---------- closed / can't make it ---------- */
+  .closed { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 21px; padding: 10px 0; }
+  .closed .big, .success .big { font-size: 46px; }
+  .link-btn {
+    display: block; margin: 18px auto 0; background: none; border: 0; cursor: pointer;
+    font: inherit; font-size: 14px; color: var(--berry); text-decoration: underline;
+  }
+  .small-lead { font-size: 19px; margin-bottom: 16px; }
+
+  /* ---------- children & dietary ---------- */
+  .child-box {
+    margin: -4px 0 16px; padding: 12px 14px; border-radius: 12px; background: #fffdf8; border: 1.5px dashed #e3d4ae;
+  }
+  .mini-label { font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 8px; }
+  .mini-label small { font-weight: 400; color: var(--muted); }
+  .ages { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .ages label { display: flex; align-items: center; gap: 6px; font-weight: 400; font-size: 14px; color: var(--ink); margin: 0; }
+  .ages select { width: auto; padding: 8px 10px; }
+  .inline-field { display: flex; align-items: center; gap: 10px; font-size: 14px; margin: 0; }
+  .inline-field select { width: auto; padding: 8px 10px; }
+  .diet { border: 0; padding: 0; margin: 0 0 16px; }
+  .diet legend { font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 8px; padding: 0; }
+  .diet legend small { font-weight: 400; color: var(--muted); }
+  .diet-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .diet-opts label {
+    display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 400; font-size: 14px; color: var(--ink);
+    background: #fff; border: 1.5px solid #e3d4ae; border-radius: 999px; padding: 6px 12px; cursor: pointer;
+  }
+  .diet-opts label:has(input:checked) { border-color: var(--pine); background: #e7f1e3; }
+  .diet-opts input { width: auto; margin: 0; accent-color: var(--pine); }
+  #dietOther { margin-top: 10px; }
+  .notice-note {
+    font-size: 14px; color: var(--berry); background: #fdecee; border: 1px solid #f0c2c8;
+    border-radius: 10px; padding: 10px 12px; margin: 0 0 12px;
+  }
+
+  /* ---------- add to calendar ---------- */
+  .cal-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 16px 0 6px; }
+  .pill {
+    display: inline-block; padding: 11px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 15px;
+    background: var(--berry); color: var(--cream); border: 2px solid var(--berry);
+  }
+  .pill.outline { background: #fff; color: var(--berry); }
+
+  /* ---------- waiting list ---------- */
+  .day.waitlist { background: var(--taken); border: 1.5px dashed var(--berry-soft); color: var(--muted); }
+  .day.waitlist .num { text-decoration: line-through; text-decoration-color: var(--berry-soft); }
+  .day.waitlist .tag { color: var(--berry); font-weight: 700; }
+  .day.waitlist.selected { background: #fdecee; border-style: solid; border-color: var(--berry); color: var(--berry); }
+  .legend .wait { background: var(--taken); border: 1.5px dashed var(--berry-soft); }
+  .wait-box {
+    margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: #fff; border: 1.5px dashed var(--berry);
+  }
+  .wait-box .stay-q { color: var(--berry); }
+  .wait-note { font-size: 14px; color: var(--muted); margin: 0 0 10px; }
+  .wait-box .row-even { margin-bottom: 10px; }
+  .wait-done { font-family: 'Cormorant Garamond', serif; font-size: 19px; color: var(--pine); margin: 0; }
+
+  /* ---------- share ---------- */
+  .share { text-align: center; color: var(--cream); margin: 4px 0 18px; }
+  .share p { font-family: 'Cormorant Garamond', serif; font-size: 19px; margin: 0 0 10px; color: var(--gold-light); }
+  .share .pill { margin: 4px; font-family: inherit; cursor: pointer; }
+  .pill.wa { background: #1f8f4e; border-color: #1f8f4e; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="snow" id="snow" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header>
+    <div class="bunting" aria-hidden="true">✦ ❄ ✦</div>
+    <div class="eyebrow">You’re invited</div>
+    <h1>Christmas Supper</h1>
+    <div class="subtitle">with us — instead of presents</div>
+  </header>
+
+  <section class="card">
+    <p class="lead">
+      This year we’re swapping wrapping paper for <em>good food, warm company and long conversations</em>.
+      Rather than buying each other presents, we’d love the gift of your time.
+      Pick an evening below and come and share a Christmas meal with us.
+    </p>
+    <div class="divider" aria-hidden="true">❦</div>
+    <div class="steps">
+      <div class="step"><div class="icon">🎄</div><strong>Pick an evening</strong><span>Any free night from 1–23 December</span></div>
+      <div class="step"><div class="icon">✉️</div><strong>Tell us who’s coming</strong><span>A confirmation lands in your inbox</span></div>
+      <div class="step"><div class="icon">🕯️</div><strong>Meet in the middle</strong><span>Pop in your postcode and pick a place halfway between us</span></div>
+    </div>
+    <div class="gift-note">
+      <span class="icon" aria-hidden="true">🎁</span>
+      <div>
+        <strong>If you insist on gifts</strong>, just add to Sam’s ISA:
+        <span class="bank">
+          <button type="button" class="copy" data-copy="18263725">Account <b>18263725</b><i>Copy</i></button>
+          <button type="button" class="copy" data-copy="608371">Sort code <b>60-83-71</b><i>Copy</i></button>
+          <button type="button" class="copy" data-copy="Sam Warren">Reference <b>Sam Warren</b><i>Copy</i></button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <nav class="progress" id="progress" aria-label="Booking progress">
+    <ol>
+      <li data-step="1" class="active"><span>1</span>Pick an evening</li>
+      <li data-step="2"><span>2</span>Your details</li>
+      <li data-step="3"><span>3</span>Where to eat</li>
+    </ol>
+  </nav>
+
+  <section class="card" id="calendarCard">
+    <h2>Choose your evening</h2>
+    <div class="month">December <span id="year">2026</span> · evenings from <span id="startLabel">6pm</span></div>
+    <div id="calLoading" class="loading">Checking the diary…</div>
+    <div id="calBody" class="hidden">
+      <div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+      <div class="grid" id="grid"></div>
+      <div class="legend">
+        <span><i class="free"></i>Available</span>
+        <span><i class="chosen"></i>Your choice</span>
+        <span><i class="gone"></i>Already taken</span>
+        <span><i class="wait"></i>Taken — tap to join the waiting list</span>
+      </div>
+    </div>
+    <div id="waitBox" class="wait-box hidden" role="region" aria-labelledby="waitTitle">
+      <div class="stay-q" id="waitTitle"></div>
+      <p class="wait-note">Someone’s already booked this one — but plans change! Leave your details and we’ll email you straight away if it frees up.</p>
+      <div id="waitError" class="error hidden" role="alert"></div>
+      <div id="waitForm">
+        <div class="row-even">
+          <input id="wName" autocomplete="name" maxlength="80" placeholder="Your name" aria-label="Your name">
+          <input id="wEmail" type="email" autocomplete="email" maxlength="120" placeholder="Your email" aria-label="Your email">
+        </div>
+        <button class="btn btn-small" type="button" id="waitBtn">Let me know if it frees up</button>
+        <button class="btn-ghost" type="button" id="waitClose">Close</button>
+      </div>
+      <p id="waitDone" class="wait-done hidden"></p>
+    </div>
+    <div id="calClosed" class="closed hidden">
+      <div class="big" aria-hidden="true">✨</div>
+      <p id="calClosedText"></p>
+    </div>
+    <button type="button" class="link-btn" id="regretsOpen">Can’t make it this year? Leave us a message 💌</button>
+  </section>
+
+  <section class="card hidden" id="regretsCard">
+    <h2>We’ll miss you!</h2>
+    <p class="lead small-lead">Can’t make it this year? No problem at all — leave us a little message and we’ll catch up soon.</p>
+    <div id="regretsError" class="error hidden" role="alert"></div>
+    <form id="regretsForm" novalidate>
+      <div class="row-even">
+        <div class="field">
+          <label for="rName">Your name</label>
+          <input id="rName" autocomplete="name" maxlength="80">
+        </div>
+        <div class="field">
+          <label for="rEmail">Email <small>(optional)</small></label>
+          <input id="rEmail" type="email" autocomplete="email" maxlength="120">
+        </div>
+      </div>
+      <div class="field">
+        <label for="rMessage">Your message</label>
+        <textarea id="rMessage" maxlength="1000" placeholder="Merry Christmas! Sorry we can’t make it this year…"></textarea>
+      </div>
+      <button class="btn" type="submit" id="regretsBtn">Send our love 💌</button>
+      <button class="btn-ghost" type="button" id="regretsBack">Actually, we’d like to book an evening</button>
+    </form>
+    <div id="regretsDone" class="success hidden">
+      <div class="big" aria-hidden="true">💌</div>
+      <p>Thank you, <span id="rDoneName"></span> — your message is on its way to us. Have a wonderful Christmas!</p>
+    </div>
+  </section>
+
+  <section class="card hidden" id="formCard">
+    <h2>Save your seat</h2>
+    <div class="chosen-banner">Supper on <strong id="chosenLabel"></strong></div>
+    <div id="formError" class="error hidden" role="alert"></div>
+    <form id="bookingForm" novalidate>
+      <div class="field">
+        <label for="name">Your name</label>
+        <input id="name" name="name" autocomplete="name" required maxlength="80">
+      </div>
+      <div class="row-even">
+        <div class="field">
+          <label for="adults">Adults <small>(including you)</small></label>
+          <select id="adults" name="adults"></select>
+        </div>
+        <div class="field">
+          <label for="children">Children</label>
+          <select id="children" name="children"></select>
+        </div>
+      </div>
+      <div id="childBox" class="child-box hidden">
+        <div class="mini-label">How old are the children? <small>— helps us book the right table</small></div>
+        <div id="childAges" class="ages"></div>
+        <label class="inline-field" for="highchairs">Highchairs needed
+          <select id="highchairs"></select>
+        </label>
+      </div>
+      <div class="field">
+        <label for="email">Email address <small>— for your confirmation</small></label>
+        <input id="email" name="email" type="email" autocomplete="email" required maxlength="120">
+      </div>
+      <div class="field">
+        <label for="phone">Mobile number <small>— in case we need to reach you on the night</small></label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="20" placeholder="e.g. 07700 900123">
+      </div>
+      <fieldset class="diet">
+        <legend>Any dietary needs? <small>(tick any that apply)</small></legend>
+        <div class="diet-opts">
+          <label><input type="checkbox" name="diet" value="Vegetarian"> Vegetarian</label>
+          <label><input type="checkbox" name="diet" value="Vegan"> Vegan</label>
+          <label><input type="checkbox" name="diet" value="Gluten-free"> Gluten-free</label>
+          <label><input type="checkbox" name="diet" value="Dairy-free"> Dairy-free</label>
+          <label><input type="checkbox" name="diet" value="Nut allergy"> Nut allergy</label>
+          <label><input type="checkbox" id="dietOtherTick"> Other</label>
+        </div>
+        <input id="dietOther" class="hidden" maxlength="200" placeholder="e.g. shellfish allergy, no pork, halal…" aria-label="Other dietary needs">
+      </fieldset>
+      <div class="venue-box">
+        <div class="venue-head">
+          <span class="icon" aria-hidden="true">📍</span>
+          <div>
+            <strong>Where shall we eat?</strong>
+            <span>Pop in your postcode — we’ll work out your journey and find places roughly halfway between us. Or skip the restaurant and come to ours.</span>
+          </div>
+        </div>
+        <p id="noticeNote" class="notice-note hidden"></p>
+        <div class="postcode-row">
+          <input id="postcode" name="postcode" autocomplete="postal-code" placeholder="Your postcode, e.g. CF10 1AA" maxlength="10" aria-label="Your postcode">
+          <button class="btn btn-small" type="button" id="findBtn">Find places</button>
+        </div>
+        <p id="travelNote" class="travel-note hidden"></p>
+        <div id="venueError" class="error hidden" role="alert"></div>
+        <div id="venueLoading" class="loading small hidden">Searching the map for somewhere cosy…</div>
+        <div id="venueResults" class="hidden">
+          <p class="venue-summary" id="venueSummary"></p>
+          <div class="chips" id="chips" role="group" aria-label="Filter by cuisine"></div>
+          <div class="venue-list" id="venueList" role="radiogroup" aria-label="Choose a place"></div>
+          <p class="credit">Places from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> — worth checking opening times before you settle on one.</p>
+        </div>
+        <label class="venue ours">
+          <input type="radio" name="venue" value="ours" id="atOurs">
+          <div>
+            <div class="v-name">🏡 Come over to ours</div>
+            <div class="v-meta">Skip the restaurant — we’ll cook. Just bring yourselves<span id="bringNote"> and your favourite game! 🎲</span>
+              We’ll confirm with you and send our address.</div>
+          </div>
+        </label>
+        <div id="foodBox" class="stay hidden">
+          <label for="food" class="stay-q">🍽️ What would you like to eat?</label>
+          <textarea id="food" maxlength="400" placeholder="e.g. a proper roast, a curry night, lasagne… or “surprise us!”"></textarea>
+        </div>
+        <label class="venue undecided">
+          <input type="radio" name="venue" value="" id="undecided">
+          <div>
+            <div class="v-name">Let’s decide together</div>
+            <div class="v-meta">Not sure yet? No problem — we’ll be in touch about where.</div>
+          </div>
+        </label>
+        <div id="stayBox" class="stay stay-wide hidden" role="group" aria-labelledby="stayQ">
+          <div id="stayQ" class="stay-q">🛏️ Would you like to stay the night with us?</div>
+          <div class="stay-note" id="stayNote"></div>
+          <div class="stay-opts">
+            <label><input type="radio" name="stay" value="yes"> Yes please, we’d love to stay</label>
+            <label><input type="radio" name="stay" value="no"> No thanks, we’ll head home</label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="notes">Anything else we should know? <small>(optional)</small></label>
+        <textarea id="notes" name="notes" maxlength="600" placeholder="e.g. a dish you’d love, step-free access, arriving a bit late…"></textarea>
+      </div>
+      <button class="btn" type="submit" id="submitBtn">Reserve my evening ✦</button>
+      <button class="btn-ghost" type="button" id="changeBtn">Choose a different evening</button>
+      <p class="fine">If you pick a place, we’ll book the table and email you once it’s confirmed.</p>
+    </form>
+  </section>
+
+  <section class="card hidden success" id="successCard">
+    <div class="big" aria-hidden="true">🎁</div>
+    <h2>You’re on the list!</h2>
+    <p>Thank you, <span id="okName"></span>. We’ll see you on</p>
+    <p class="when" id="okWhen"></p>
+    <p id="okWhere"></p>
+    <p>A confirmation is on its way to <span id="okEmail"></span>.</p>
+    <p class="fine">Can’t see it in a few minutes? Have a look in your junk or spam folder — it comes from lottewarren95@gmail.com.</p>
+    <div class="cal-buttons">
+      <a class="pill" id="gcalBtn" href="#" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
+      <a class="pill outline" id="icsBtn" href="#" download="christmas-supper.ics">🍎 Apple / Outlook calendar</a>
+    </div>
+    <p class="fine">We’ll send you a reminder a couple of days before.</p>
+  </section>
+
+  <div class="share">
+    <p>Know someone else who should come? Pass the invite on:</p>
+    <a class="pill wa" id="waBtn" href="#" target="_blank" rel="noopener">📲 Share on WhatsApp</a>
+    <button type="button" class="pill outline" id="copyLinkBtn">🔗 Copy the link</button>
+  </div>
+
+  <footer>With love, <span id="hosts">The Warren Family</span></footer>
+</div>
+
+<!-- Soft background music: Welsh → English, round and round -->
+<button type="button" class="music" id="musicBtn" aria-pressed="false">
+  <span class="music-icon" id="musicIcon" aria-hidden="true">🎵</span>
+  <span class="music-text">
+    <span class="music-title" id="musicTitle">Tap anywhere for Christmas music</span>
+    <span class="music-credit" id="musicCredit"></span>
+  </span>
+</button>
+<audio id="music" preload="none"></audio>
+
+<script>
+  // ---------- talking to Google (or a pretend version when previewed outside Apps Script) ----------
+  var isLive = typeof google !== 'undefined' && google.script && google.script.run;
+
+  var mock = {
+    getAvailability: function () {
+      // Pretend: 5–7 Dec are too soon for a restaurant. Add #closed to the address to preview "closed".
+      var taken = [1, 2, 3, 4, 9, 12, 18];
+      var days = [];
+      for (var d = 1; d <= 23; d++) days.push({ day: d, available: taken.indexOf(d) === -1, past: false, restaurantOk: d > 7, waitable: d === 12 || d === 18 });
+      return { year: 2026, hosts: 'The Warren Family', startLabel: '6pm', maxGuests: 12, noticeDays: 3,
+        closed: location.hash === '#closed', pageUrl: 'https://script.google.com/macros/s/EXAMPLE/exec',
+        whatToBring: 'Your favourite game! 🎲', days: days };
+    },
+    sendRegrets: function (f) { return { name: f.name }; },
+    joinWaitlist: function (f) { return { date: longDate(f.day) + ' 2026' }; },
+    // Pretend: Manchester/Leeds/Edinburgh-style postcodes are "far", everything else is close.
+    getTravelInfo: function (pc) {
+      var far = /^(M|LS|EH)\d/i.test(pc.trim());
+      return far ? { postcode: pc.toUpperCase(), minutes: 205, label: '3 hours 25 min', longTrip: true }
+                 : { postcode: pc.toUpperCase(), minutes: 25, label: '25 min', longTrip: false };
+    },
+    findVenues: function (pc) {
+      var sample = [
+        ['The Holly Bush', ['Pub', 'British']], ['Shamrat', ['Indian']], ['La Luna', ['Italian', 'Pizza']],
+        ['Golden Dragon', ['Chinese']], ['The Elm Tree Inn', ['Pub']], ['Bella Napoli', ['Italian']],
+        ['Spice Garden', ['Indian']], ['The Old Barn', ['British', 'Steakhouse']], ['Thai Orchid', ['Thai']],
+        ['El Toro', ['Spanish']]
+      ];
+      return {
+        postcode: pc.toUpperCase(), area: 'Cardiff', milesApart: 12.4, travel: mock.getTravelInfo(pc),
+        venues: sample.map(function (s, i) {
+          return { name: s[0], cuisines: s[1], address: (10 + i) + ' High Street, Castleton', website: '',
+            lat: 51.53, lng: -3.05, fromYou: 5 + i * 0.4, fromUs: 7 - i * 0.2 };
+        })
+      };
+    },
+    bookSlot: function (f) {
+      return { name: f.name, email: f.email, date: longDate(f.day), time: '6pm', venue: f.venue ? f.venue.name : '',
+        atOurs: f.atOurs, stayOver: f.stayOver, googleCalendarUrl: 'https://calendar.google.com/',
+        ics: 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nEND:VCALENDAR' };
+    }
+  };
+
+  function call(fn, arg) {
+    return new Promise(function (resolve, reject) {
+      if (!isLive) return setTimeout(function () { resolve(mock[fn](arg)); }, 500);
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[fn](arg);
+    });
+  }
+
+  // ---------- state & helpers ----------
+  var state = { data: null, selected: null };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function longDate(day) {
+    var year = state.data ? state.data.year : 2026;
+    return new Date(year, 11, day).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+
+  // 10–15 digits, allowing spaces, brackets, dashes and a leading +.
+  function validPhone(p) {
+    var digits = String(p || '').replace(/[\s()-]/g, '');
+    return /^\+?\d{10,15}$/.test(digits);
+  }
+
+  function cleanError(err) {
+    var msg = (err && err.message) ? err.message : String(err || 'Something went wrong.');
+    return msg.replace(/^(Exception|Error):\s*/i, '');
+  }
+
+  // ---------- calendar ----------
+  function renderCalendar() {
+    var data = state.data;
+    var grid = $('grid');
+    grid.innerHTML = '';
+    var first = data.days[0].day;
+    var lead = (new Date(data.year, 11, first).getDay() + 6) % 7; // Monday-first
+    for (var i = 0; i < lead; i++) {
+      var blank = document.createElement('div');
+      blank.className = 'blank';
+      grid.appendChild(blank);
+    }
+    data.days.forEach(function (d) {
+      var btn = document.createElement('button');
+      var wait = !d.available && d.waitable;
+      btn.type = 'button';
+      btn.className = 'day' + (wait ? ' waitlist' : '') +
+        ((wait ? state.waitDay : state.selected) === d.day ? ' selected' : '');
+      btn.disabled = !d.available && !wait;
+      btn.innerHTML = '<span class="num">' + d.day + '</span><span class="tag">' +
+        (d.available ? 'from ' + data.startLabel : wait ? 'Waiting list' : (d.past ? 'Passed' : 'Taken')) + '</span>';
+      btn.setAttribute('aria-label', longDate(d.day) +
+        (d.available ? ', available' : wait ? ', taken — join the waiting list' : ', not available'));
+      btn.addEventListener('click', function () { if (wait) openWaitlist(d.day); else choose(d.day); });
+      grid.appendChild(btn);
+    });
+  }
+
+  // ---------- waiting list ----------
+  function openWaitlist(day) {
+    state.waitDay = day;
+    renderCalendar();
+    $('waitTitle').textContent = '⏳ ' + longDate(day) + ' is taken';
+    $('waitError').classList.add('hidden');
+    $('waitDone').classList.add('hidden');
+    $('waitForm').classList.remove('hidden');
+    $('waitBox').classList.remove('hidden');
+    $('waitBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function closeWaitlist() {
+    state.waitDay = null;
+    $('waitBox').classList.add('hidden');
+    renderCalendar();
+  }
+  $('waitClose').addEventListener('click', closeWaitlist);
+  $('waitBtn').addEventListener('click', function () {
+    var f = { day: state.waitDay, name: $('wName').value.trim(), email: $('wEmail').value.trim() };
+    var err = $('waitError');
+    err.classList.add('hidden');
+    var problem = !f.name ? 'Please tell us your name.'
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email) ? 'That email address doesn’t look quite right.' : '';
+    if (problem) { err.textContent = problem; err.classList.remove('hidden'); return; }
+    var btn = $('waitBtn');
+    btn.disabled = true;
+    call('joinWaitlist', f).then(function (res) {
+      $('waitForm').classList.add('hidden');
+      $('waitDone').textContent = '✅ You’re on the waiting list for ' + res.date + '. We’ll email you the moment it frees up — first come, first served! In the meantime, why not pick another evening?';
+      $('waitDone').classList.remove('hidden');
+    }).catch(function (e) {
+      err.textContent = cleanError(e);
+      err.classList.remove('hidden');
+    }).then(function () { btn.disabled = false; });
+  });
+
+  function choose(day) {
+    if (state.waitDay) { state.waitDay = null; $('waitBox').classList.add('hidden'); }
+    state.selected = day;
+    renderCalendar();
+    $('chosenLabel').textContent = longDate(day) + ', from ' + state.data.startLabel;
+    $('formError').classList.add('hidden');
+    $('regretsCard').classList.add('hidden');
+    $('formCard').classList.remove('hidden');
+    applyNotice(day);
+    setStep(2);
+    $('formCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(function () { $('name').focus({ preventScroll: true }); }, 400);
+  }
+
+  // ---------- progress steps ----------
+  function setStep(n) {
+    Array.prototype.forEach.call(document.querySelectorAll('#progress li'), function (li) {
+      var s = Number(li.getAttribute('data-step'));
+      li.classList.toggle('done', s < n);
+      li.classList.toggle('active', s === n);
+      if (s === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+  }
+  // Moving into the "Where shall we eat?" box is step 3; back up into the details is step 2.
+  document.addEventListener('focusin', function (e) {
+    if ($('formCard').classList.contains('hidden')) return;
+    if (e.target.closest('.venue-box')) setStep(3);
+    else if (e.target.closest('#bookingForm')) setStep(2);
+  });
+
+  // ---------- restaurants need notice ----------
+  function applyNotice(day) {
+    var d = state.data.days.filter(function (x) { return x.day === day; })[0];
+    var ok = !d || d.restaurantOk !== false;
+    $('noticeNote').textContent = ok ? '' : 'This evening is less than ' + state.data.noticeDays +
+      ' days away — too soon for us to book a restaurant. Come over to ours, or let’s decide together. (Pick a later evening if you’d like a restaurant.)';
+    $('noticeNote').classList.toggle('hidden', ok);
+    $('findBtn').classList.toggle('hidden', !ok);
+    if (!ok) {
+      $('venueResults').classList.add('hidden');
+      if (venueState.chosen) {
+        venueState.chosen = null;
+        var picked = document.querySelector('#venueList input:checked');
+        if (picked) picked.checked = false;
+      }
+    } else if (venueState.list.length) {
+      $('venueResults').classList.remove('hidden');
+    }
+  }
+
+  function fillNumbers(sel, from, to, picked) {
+    if (sel.options.length) return;
+    for (var n = from; n <= to; n++) {
+      var o = document.createElement('option');
+      o.value = n; o.textContent = n;
+      if (n === picked) o.selected = true;
+      sel.appendChild(o);
+    }
+  }
+
+  function loadAvailability() {
+    return call('getAvailability').then(function (data) {
+      state.data = data;
+      $('year').textContent = data.year;
+      $('startLabel').textContent = data.startLabel;
+      $('hosts').textContent = data.hosts;
+      if (data.whatToBring) $('bringNote').textContent = ' and ' + data.whatToBring.charAt(0).toLowerCase() + data.whatToBring.slice(1);
+      setUpSharing(data.pageUrl);
+      fillNumbers($('adults'), 1, data.maxGuests, 2);
+      fillNumbers($('children'), 0, data.maxGuests - 1, 0);
+      if (state.selected && !data.days.some(function (d) { return d.day === state.selected && d.available; })) {
+        state.selected = null;
+        $('formCard').classList.add('hidden');
+      }
+      $('calLoading').classList.add('hidden');
+
+      // After the last evening, or when every evening has gone, say so kindly instead of an empty calendar.
+      var anyFree = data.days.some(function (d) { return d.available; });
+      if (data.closed || !anyFree) {
+        $('calClosedText').textContent = data.closed
+          ? 'That’s a wrap for this year — thank you to everyone who came! See you next Christmas. 🎄'
+          : 'Every evening is now taken — what a lovely problem to have! You can still leave us a message below.';
+        document.querySelector('#calendarCard h2').textContent = data.closed ? 'See you next year!' : 'All booked up!';
+        $('calClosed').classList.remove('hidden');
+        $('calBody').classList.add('hidden');
+        $('formCard').classList.add('hidden');
+        $('progress').classList.add('hidden');
+        if (data.closed) $('regretsOpen').classList.add('hidden');
+        return;
+      }
+      renderCalendar();
+      $('calBody').classList.remove('hidden');
+    }).catch(function (err) {
+      $('calLoading').textContent = 'We couldn’t open the diary just now — please refresh the page. (' + cleanError(err) + ')';
+    });
+  }
+
+  // ---------- venues ----------
+  var venueState = { list: [], filter: 'All', chosen: null };
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function renderChips() {
+    var counts = {};
+    venueState.list.forEach(function (v) {
+      v.cuisines.forEach(function (c) { counts[c] = (counts[c] || 0) + 1; });
+    });
+    var names = Object.keys(counts).sort(function (a, b) {
+      if (a === 'Other') return 1;
+      if (b === 'Other') return -1;
+      return counts[b] - counts[a] || a.localeCompare(b);
+    });
+    var box = $('chips');
+    box.innerHTML = '';
+    ['All'].concat(names).forEach(function (name) {
+      var chip = el('button', 'chip', name + ' ');
+      chip.type = 'button';
+      chip.appendChild(el('span', '', String(name === 'All' ? venueState.list.length : counts[name])));
+      chip.setAttribute('aria-pressed', String(venueState.filter === name));
+      chip.addEventListener('click', function () {
+        venueState.filter = name;
+        renderChips();
+        renderVenues();
+      });
+      box.appendChild(chip);
+    });
+  }
+
+  function renderVenues() {
+    var list = $('venueList');
+    list.innerHTML = '';
+    var shown = venueState.list.filter(function (v) {
+      return venueState.filter === 'All' || v.cuisines.indexOf(venueState.filter) !== -1;
+    });
+    if (!shown.length) {
+      list.appendChild(el('div', 'empty', 'Nothing matching that just yet — try another cuisine.'));
+      return;
+    }
+    shown.forEach(function (v) {
+      var label = el('label', 'venue');
+      var radio = el('input');
+      radio.type = 'radio';
+      radio.name = 'venue';
+      radio.checked = venueState.chosen === v;
+      radio.addEventListener('change', function () { venueState.chosen = v; });
+      var body = el('div');
+      body.appendChild(el('div', 'v-name', v.name));
+      var tags = el('div', 'v-tags');
+      v.cuisines.forEach(function (c) { tags.appendChild(el('span', '', c)); });
+      body.appendChild(tags);
+      if (v.address) body.appendChild(el('div', 'v-meta', v.address));
+      var meta = el('div', 'v-meta', v.fromYou + ' mi from you · ' + v.fromUs + ' mi from us · ');
+      var map = el('a', '', 'Map ↗');
+      map.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.lat + ',' + v.lng);
+      map.target = '_blank';
+      map.rel = 'noopener';
+      meta.appendChild(map);
+      if (/^https?:\/\//i.test(v.website)) {
+        meta.appendChild(document.createTextNode(' · '));
+        var site = el('a', '', 'Website ↗');
+        site.href = v.website;
+        site.target = '_blank';
+        site.rel = 'noopener';
+        meta.appendChild(site);
+      }
+      body.appendChild(meta);
+      label.appendChild(radio);
+      label.appendChild(body);
+      list.appendChild(label);
+    });
+  }
+
+  function findVenues() {
+    if ($('findBtn').classList.contains('hidden')) { lookUpTravel(); return; }   // too soon for a restaurant
+    var pc = $('postcode').value.trim();
+    var errBox = $('venueError');
+    errBox.classList.add('hidden');
+    if (pc.replace(/\s/g, '').length < 5) {
+      errBox.textContent = 'Please enter your full postcode, e.g. CF10 1AA.';
+      errBox.classList.remove('hidden');
+      return;
+    }
+    var btn = $('findBtn');
+    btn.disabled = true;
+    $('venueResults').classList.add('hidden');
+    $('venueLoading').classList.remove('hidden');
+
+    call('findVenues', pc).then(function (res) {
+      $('postcode').value = res.postcode;
+      if (res.travel) showTravel(res.travel);
+      venueState = { list: res.venues, filter: 'All', chosen: null };
+      $('venueSummary').textContent = res.venues.length
+        ? 'We’re about ' + res.milesApart + ' miles apart — here are ' + res.venues.length + ' places roughly halfway, fairest first.'
+        : 'We couldn’t find anywhere halfway just yet — choose “Let’s decide together” and we’ll sort it.';
+      renderChips();
+      renderVenues();
+      $('venueResults').classList.remove('hidden');
+    }).catch(function (err) {
+      errBox.textContent = cleanError(err);
+      errBox.classList.remove('hidden');
+    }).then(function () {
+      btn.disabled = false;
+      $('venueLoading').classList.add('hidden');
+    });
+  }
+
+  $('findBtn').addEventListener('click', findVenues);
+  $('postcode').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); findVenues(); }
+  });
+  $('undecided').addEventListener('change', function () { venueState.chosen = null; });
+  $('atOurs').addEventListener('change', function () { venueState.chosen = null; });
+
+  // ---------- journey time & staying over ----------
+  var travel = null;          // { minutes, label, longTrip } once we know their postcode
+  var travelFor = '';
+
+  function showTravel(t) {
+    travel = t;
+    travelFor = t.postcode;
+    $('travelNote').textContent = '🚗 You’re about ' + t.label + ' away from us by car.' +
+      (t.longTrip ? ' That’s a long way — you’re very welcome to stay over!' : '');
+    $('travelNote').classList.remove('hidden');
+    updateExtras();
+  }
+
+  function lookUpTravel() {
+    var pc = $('postcode').value.trim();
+    if (pc.replace(/\s/g, '').length < 5 || pc.toUpperCase().replace(/\s/g, '') === travelFor.replace(/\s/g, '')) return;
+    call('getTravelInfo', pc).then(showTravel).catch(function () { /* the restaurant search will show any error */ });
+  }
+  $('postcode').addEventListener('change', lookUpTravel);
+
+  // The food question shows for "Come over to ours". The stay question shows for "Come over to ours",
+  // and for anyone more than 2 hours' drive away whatever they choose.
+  function updateExtras() {
+    var ours = $('atOurs').checked;
+    $('foodBox').classList.toggle('hidden', !ours);
+    var ask = ours || !!(travel && travel.longTrip);
+    $('stayBox').classList.toggle('hidden', !ask);
+    if (ours) {
+      $('stayQ').textContent = '🛏️ Would you like to stay the night with us?';
+      $('stayNote').textContent = travel && travel.longTrip ? 'You’ve got about ' + travel.label + ' to get home, so the spare bed is yours if you want it.' : '';
+    } else if (ask) {
+      $('stayQ').textContent = '🛏️ Would you like to stay at ours after the meal?';
+      $('stayNote').textContent = 'You’re about ' + travel.label + ' away, so you’re very welcome to stay the night. Please let us know either way so we can get a bed ready.';
+    }
+  }
+  document.addEventListener('change', function (e) {
+    if (e.target.name === 'venue') updateExtras();
+  });
+
+  function stayAsked() {
+    return !$('stayBox').classList.contains('hidden');
+  }
+
+  function stayChoice() {
+    var picked = document.querySelector('input[name="stay"]:checked');
+    return picked ? picked.value : '';
+  }
+
+  // ---------- form ----------
+  $('changeBtn').addEventListener('click', function () {
+    $('calendarCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  $('bookingForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var errBox = $('formError');
+    errBox.classList.add('hidden');
+
+    var form = {
+      day: state.selected,
+      name: $('name').value.trim(),
+      email: $('email').value.trim(),
+      phone: $('phone').value.trim(),
+      adults: $('adults').value,
+      children: $('children').value,
+      notes: $('notes').value.trim(),
+      food: $('atOurs').checked ? $('food').value.trim() : '',
+      longTrip: !!(travel && travel.longTrip),
+      postcode: $('postcode').value.trim(),
+      venue: venueState.chosen ? {
+        name: venueState.chosen.name,
+        address: venueState.chosen.address,
+        cuisine: venueState.chosen.cuisines.join(', '),
+        website: venueState.chosen.website || '',
+        phone: venueState.chosen.phone || '',
+        lat: venueState.chosen.lat,
+        lng: venueState.chosen.lng
+      } : null,
+      atOurs: $('atOurs').checked,
+      stayOver: stayAsked() && stayChoice() === 'yes',
+      dietary: Array.prototype.map.call(document.querySelectorAll('input[name="diet"]:checked'), function (c) { return c.value; }),
+      dietaryOther: $('dietOtherTick').checked ? $('dietOther').value.trim() : '',
+      childAges: Array.prototype.map.call(document.querySelectorAll('#childAges select'), function (s) { return s.value; }),
+      highchairs: $('highchairs').value || 0
+    };
+    var agesMissing = form.childAges.some(function (a) { return a === ''; });
+    var total = (parseInt(form.adults, 10) || 0) + (parseInt(form.children, 10) || 0);
+    var problem = !form.day ? 'Please pick an evening from the calendar.'
+      : !form.name ? 'Please tell us your name.'
+      : total > state.data.maxGuests ? 'That’s a big party! Please get in touch with us directly for more than ' + state.data.maxGuests + '.'
+      : agesMissing ? 'Please tell us how old the children are.'
+      : ($('dietOtherTick').checked && !form.dietaryOther) ? 'Please tell us about the “other” dietary need.'
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? 'That email address doesn’t look quite right.'
+      : !validPhone(form.phone) ? 'Please add a mobile number we can reach you on, e.g. 07700 900123.'
+      : form.postcode.replace(/\s/g, '').length < 5 ? 'Please pop in your postcode so we can work out your journey.'
+      : (!venueState.chosen && !$('undecided').checked && !$('atOurs').checked)
+        ? 'Please pick a place to eat, choose “Come over to ours”, or choose “Let’s decide together”.'
+      : (stayAsked() && !stayChoice()) ? 'Would you like to stay the night with us? Please choose yes or no so we know.'
+      : '';
+    if (problem) { errBox.textContent = problem; errBox.classList.remove('hidden'); return; }
+
+    var btn = $('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Wrapping up your booking…';
+
+    call('bookSlot', form).then(function (res) {
+      $('okName').textContent = res.name.split(/\s+/)[0];
+      $('okWhen').textContent = res.date + ', from ' + res.time;
+      $('okEmail').textContent = res.email;
+      $('okWhere').textContent = (res.venue
+        ? 'at ' + res.venue + ' — we’ll book the table and email you as soon as it’s confirmed.'
+        : res.atOurs
+          ? 'at ours! We’ll confirm with you very soon — usually within a day — and send our address and directions.'
+          : 'We’ll be in touch about where we’ll be eating.') +
+        (res.stayOver && !res.atOurs ? ' 🛏️ We’ll confirm your stay over very soon, along with our address.' : '');
+      $('gcalBtn').href = res.googleCalendarUrl;
+      try {
+        $('icsBtn').href = URL.createObjectURL(new Blob([res.ics], { type: 'text/calendar' }));
+      } catch (err) {
+        $('icsBtn').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(res.ics);
+      }
+      setStep(4);
+      $('formCard').classList.add('hidden');
+      $('calendarCard').classList.add('hidden');
+      $('successCard').classList.remove('hidden');
+      $('successCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }).catch(function (err) {
+      errBox.textContent = cleanError(err);
+      errBox.classList.remove('hidden');
+      loadAvailability(); // someone may have just taken this evening
+    }).then(function () {
+      btn.disabled = false;
+      btn.textContent = 'Reserve my evening ✦';
+    });
+  });
+
+  // ---------- children's ages & highchairs ----------
+  function renderChildren() {
+    var n = parseInt($('children').value, 10) || 0;
+    var box = $('childAges');
+    var old = Array.prototype.map.call(box.querySelectorAll('select'), function (s) { return s.value; });
+    box.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var label = document.createElement('label');
+      label.appendChild(document.createTextNode('Child ' + (i + 1)));
+      var sel = document.createElement('select');
+      sel.setAttribute('aria-label', 'Age of child ' + (i + 1));
+      var blank = document.createElement('option');
+      blank.value = ''; blank.textContent = 'Age…';
+      sel.appendChild(blank);
+      for (var a = 0; a <= 17; a++) {
+        var o = document.createElement('option');
+        o.value = a; o.textContent = a === 0 ? 'Under 1' : a;
+        sel.appendChild(o);
+      }
+      if (old[i] !== undefined) sel.value = old[i];
+      label.appendChild(sel);
+      box.appendChild(label);
+    }
+    var hc = $('highchairs');
+    var keep = Math.min(parseInt(hc.value, 10) || 0, n);
+    hc.innerHTML = '';
+    for (var h = 0; h <= n; h++) {
+      var opt = document.createElement('option');
+      opt.value = h; opt.textContent = h === 0 ? 'None' : h;
+      hc.appendChild(opt);
+    }
+    hc.value = keep;
+    $('childBox').classList.toggle('hidden', n === 0);
+  }
+  $('children').addEventListener('change', renderChildren);
+
+  // ---------- dietary "other" ----------
+  $('dietOtherTick').addEventListener('change', function () {
+    $('dietOther').classList.toggle('hidden', !this.checked);
+    if (this.checked) $('dietOther').focus();
+  });
+
+  // ---------- copy buttons for Sam's ISA ----------
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () { return legacyCopy(text); });
+    }
+    return Promise.resolve(legacyCopy(text));
+  }
+  function legacyCopy(text) {
+    var t = document.createElement('textarea');
+    t.value = text;
+    t.setAttribute('readonly', '');
+    t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t);
+    t.select();
+    try { document.execCommand('copy'); } catch (e) { /* nothing more we can do */ }
+    document.body.removeChild(t);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.copy'), function (btn) {
+    btn.addEventListener('click', function () {
+      copyText(btn.getAttribute('data-copy')).then(function () {
+        var tag = btn.querySelector('i');
+        btn.classList.add('copied');
+        tag.textContent = 'Copied!';
+        setTimeout(function () { btn.classList.remove('copied'); tag.textContent = 'Copy'; }, 1800);
+      });
+    });
+  });
+
+  // ---------- share the invite ----------
+  function setUpSharing(url) {
+    if (!url) { $('waBtn').parentNode.classList.add('hidden'); return; }
+    var msg = '🎄 Instead of presents this year, ' + state.data.hosts +
+      ' would love you to come for a Christmas supper! Pick your evening here: ' + url;
+    $('waBtn').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+    $('copyLinkBtn').onclick = function () {
+      copyText(url).then(function () {
+        $('copyLinkBtn').textContent = '✅ Link copied!';
+        setTimeout(function () { $('copyLinkBtn').textContent = '🔗 Copy the link'; }, 2000);
+      });
+    };
+  }
+
+  // ---------- can't make it this year ----------
+  $('regretsOpen').addEventListener('click', function () {
+    $('formCard').classList.add('hidden');
+    $('progress').classList.add('hidden');
+    $('regretsCard').classList.remove('hidden');
+    $('regretsCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(function () { $('rName').focus({ preventScroll: true }); }, 400);
+  });
+  $('regretsBack').addEventListener('click', function () {
+    $('regretsCard').classList.add('hidden');
+    if (!$('calBody').classList.contains('hidden')) $('progress').classList.remove('hidden');
+    setStep(1);
+    $('calendarCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('regretsForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = $('regretsError');
+    err.classList.add('hidden');
+    var f = { name: $('rName').value.trim(), email: $('rEmail').value.trim(), message: $('rMessage').value.trim() };
+    var problem = !f.name ? 'Please tell us your name.'
+      : (f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) ? 'That email address doesn’t look quite right.'
+      : !f.message ? 'Please write a little message.' : '';
+    if (problem) { err.textContent = problem; err.classList.remove('hidden'); return; }
+    var btn = $('regretsBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    call('sendRegrets', f).then(function (res) {
+      $('rDoneName').textContent = res.name.split(/\s+/)[0];
+      $('regretsForm').classList.add('hidden');
+      $('regretsDone').classList.remove('hidden');
+    }).catch(function (e2) {
+      err.textContent = cleanError(e2);
+      err.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Send our love 💌';
+    });
+  });
+
+  // ---------- snow ----------
+  (function makeSnow() {
+    var snow = $('snow');
+    var glyphs = ['❄', '❅', '❆', '•'];
+    for (var i = 0; i < 36; i++) {
+      var f = document.createElement('span');
+      f.className = 'flake';
+      f.textContent = glyphs[i % glyphs.length];
+      f.style.left = (Math.random() * 100) + 'vw';
+      f.style.fontSize = (8 + Math.random() * 14) + 'px';
+      f.style.opacity = (0.35 + Math.random() * 0.55).toFixed(2);
+      f.style.animationDuration = (9 + Math.random() * 12) + 's';
+      f.style.animationDelay = (-Math.random() * 20) + 's';
+      snow.appendChild(f);
+    }
+  })();
+
+  // ---------- soft background music ----------
+  // Plays Welsh → English and round again. Browsers only allow sound after the visitor
+  // has clicked or tapped, so it starts on their first click anywhere (or on the 🎵 button).
+  var playlist = [
+    { lang: 'Welsh', title: 'Nos Galan (Deck the Halls)', credit: 'Kevin MacLeod · CC BY 2.0',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d9/Deck_the_Halls_A_%28Kevin_MacLeod%29_%28ISRC_USUAN1100263%29.oga/Deck_the_Halls_A_%28Kevin_MacLeod%29_%28ISRC_USUAN1100263%29.oga.mp3' },
+    { lang: 'English', title: 'Silent Night', credit: 'Kevin MacLeod · CC BY 3.0',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/transcoded/2/24/Silent_Night_%28Kevin_MacLeod%29_%28ISRC_USUAN1100075%29.oga/Silent_Night_%28Kevin_MacLeod%29_%28ISRC_USUAN1100075%29.oga.mp3' }
+  ];
+  var MUSIC_VOLUME = 0.3;     // soft
+  var musicEl = $('music');
+  var track = 0;
+  var musicOn = false;
+  var musicStarted = false;
+  var failsInARow = 0;
+
+  function showNowPlaying() {
+    var t = playlist[track];
+    $('musicTitle').textContent = musicOn ? '♪ ' + t.title + ' · ' + t.lang : 'Music paused — tap to play';
+    $('musicCredit').textContent = musicOn ? t.credit : '';
+    $('musicIcon').textContent = musicOn ? '🔊' : '🔇';
+    $('musicBtn').setAttribute('aria-pressed', String(musicOn));
+    $('musicBtn').setAttribute('aria-label', musicOn ? 'Pause the Christmas music' : 'Play Christmas music');
+  }
+
+  function fadeTo(target, done) {
+    var step = (target - musicEl.volume) / 20;
+    var n = 0;
+    var timer = setInterval(function () {
+      n++;
+      musicEl.volume = Math.min(1, Math.max(0, musicEl.volume + step));
+      if (n >= 20) { clearInterval(timer); musicEl.volume = target; if (done) done(); }
+    }, 60);
+  }
+
+  // A song that won't load (e.g. a bad link) is skipped rather than stopping the music.
+  function skipBroken() {
+    failsInARow++;
+    if (failsInARow < playlist.length) { playTrack(track + 1); return; }
+    musicOn = false;
+    musicEl.pause();
+    showNowPlaying();
+    $('musicTitle').textContent = 'Music unavailable just now';
+  }
+
+  function playTrack(i) {
+    track = (i + playlist.length) % playlist.length;
+    var mine = track;
+    musicEl.src = playlist[track].url;
+    musicEl.volume = 0;
+    showNowPlaying();
+    musicEl.play().then(function () {
+      failsInARow = 0;
+      fadeTo(MUSIC_VOLUME);
+    }).catch(function (err) {
+      if (err && err.name === 'AbortError') return;           // we moved on to another song first
+      if (err && err.name === 'NotAllowedError') {            // browser wants a click first
+        musicOn = false; musicStarted = false; showNowPlaying(); return;
+      }
+      if (musicOn && track === mine) skipBroken();
+    });
+  }
+
+  function startMusic() {
+    musicOn = true;
+    if (!musicStarted) { musicStarted = true; playTrack(track); return; }
+    musicEl.volume = 0;
+    showNowPlaying();
+    musicEl.play().then(function () { fadeTo(MUSIC_VOLUME); }).catch(function () { playTrack(track + 1); });
+  }
+
+  function stopMusic() {
+    musicOn = false;
+    fadeTo(0, function () { musicEl.pause(); });
+    showNowPlaying();
+  }
+
+  musicEl.addEventListener('ended', function () { if (musicOn) playTrack(track + 1); });
+
+  $('musicBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (musicOn) stopMusic(); else startMusic();
+    try { localStorage.setItem('xmasMusic', musicOn ? 'on' : 'off'); } catch (err) { /* private mode */ }
+  });
+
+  // First click or tap anywhere starts the music — unless they've turned it off before.
+  var mutedBefore = false;
+  try { mutedBefore = localStorage.getItem('xmasMusic') === 'off'; } catch (err) { /* private mode */ }
+  if (mutedBefore) {
+    $('musicTitle').textContent = 'Music off — tap to play';
+    $('musicIcon').textContent = '🔇';
+  } else {
+    var firstTouch = function (e) {
+      document.removeEventListener('pointerdown', firstTouch, true);
+      document.removeEventListener('keydown', firstTouch, true);
+      if ($('musicBtn').contains(e.target)) return;   // the button's own click handles that
+      if (!musicStarted) startMusic();
+    };
+    document.addEventListener('pointerdown', firstTouch, true);
+    document.addEventListener('keydown', firstTouch, true);
+  }
+
+  loadAvailability();
+</script>
+</body>
+</html>

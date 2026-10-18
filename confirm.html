@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<script src="shim.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Christmas Supper with the Warren Family">
+<meta property="og:description" content="Instead of presents this year, come and share a Christmas meal with us — pick your evening here.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Table booked</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #1b3a28; --pine-deep: #10261a; --berry: #8e1b2c; --berry-soft: #b23a48;
+    --gold: #c9a44c; --gold-light: #f1d98f; --cream: #fbf6ec; --parchment: #f4ead6;
+    --ink: #2a2320; --muted: #6d5f55;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Lato', system-ui, sans-serif; color: var(--ink);
+    background: radial-gradient(ellipse at 50% -10%, rgba(241,217,143,.18), transparent 55%),
+                linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 36px 16px 48px; }
+  header { text-align: center; color: var(--cream); margin-bottom: 22px; }
+  .eyebrow { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light); }
+  h1 { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(46px, 11vw, 68px); margin: 6px 0 0; line-height: 1; }
+  .card {
+    background: var(--cream); border-radius: 18px; padding: 26px 22px; border: 2px solid var(--gold);
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 0 0 6px var(--cream), inset 0 0 0 7px rgba(201,164,76,.45);
+  }
+  h2 { font-family: 'Cormorant Garamond', serif; color: var(--berry); font-size: 27px; margin: 0 0 14px; text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 15px; }
+  td { padding: 7px 0; vertical-align: top; border-bottom: 1px solid #ece2cc; }
+  td:first-child { color: var(--berry); font-weight: 700; width: 92px; padding-right: 12px; }
+  td a { color: var(--berry); font-weight: 700; }
+  label { display: block; font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 6px; }
+  label small { font-weight: 400; color: var(--muted); }
+  textarea {
+    width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 10px;
+    border: 1.5px solid #d8c9a6; background: #fff; min-height: 90px; resize: vertical; margin-bottom: 16px;
+  }
+  textarea:focus { outline: none; border-color: var(--berry); box-shadow: 0 0 0 3px rgba(142,27,44,.15); }
+  .btn {
+    display: block; width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 17px;
+    background: linear-gradient(180deg, var(--berry-soft), var(--berry)); color: var(--cream);
+    padding: 15px 20px; border-radius: 999px; box-shadow: 0 8px 18px rgba(142,27,44,.35);
+  }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .notice { background: var(--parchment); border: 1px dashed var(--gold); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 15px; }
+  .error { background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+  .loading, .done { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 21px; }
+  .done .big { font-size: 52px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div id="ctx" data-id="<?= bookingId ?>" data-key="<?= key ?>" hidden></div>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Christmas Supper</div>
+    <h1>Table booked</h1>
+  </header>
+
+  <section class="card">
+    <div id="loading" class="loading">Confirming the booking…</div>
+    <div id="error" class="error hidden" role="alert"></div>
+
+    <div id="done" class="done hidden">
+      <div class="big" id="doneIcon" aria-hidden="true">🎉</div>
+      <p id="doneText"></p>
+      <p style="font-size:17px;color:var(--muted)" id="doneSub"></p>
+    </div>
+
+    <table id="details" class="hidden"></table>
+    <button class="btn hidden" id="againBtn" type="button">Send the confirmation again</button>
+  </section>
+</div>
+
+<script>
+  // Opening this page from the ✅ button does the confirming straight away —
+  // no second click. Email link-checkers don't run this script, so they can't trigger it.
+  var ctx = document.getElementById('ctx').dataset;
+  // The GitHub copy of this page gets the booking from its own link instead.
+  if (!ctx.id || ctx.id.indexOf('<?') === 0) {
+    var qs = new URLSearchParams(location.search);
+    ctx = { id: qs.get('confirm') || '', key: qs.get('key') || '' };
+  }
+  var isLive = typeof google !== 'undefined' && google.script && google.script.run;
+
+  var mock = {
+    getBookingForConfirm: function () {
+      return { name: 'Auntie Jo Smith', email: 'jo@example.com', guests: 3, date: 'Thursday 10 December 2026', time: '6pm',
+        venue: { name: 'La Luna', address: '12 High Street, Castleton', mapsUrl: '#' },
+        notes: 'One vegetarian', tableConfirmed: '', cancelled: '',
+        tableText: 'Table for 6 — 3 guests, plus 2 adults and 1 child from us' };
+    },
+    confirmTable: function () {
+      return { name: 'Auntie Jo Smith', email: 'jo@example.com', date: 'Thursday 10 December 2026', venue: 'La Luna', sentAt: '1 Dec 2026, 19:05' };
+    }
+  };
+
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      if (!isLive) return setTimeout(function () { resolve(mock[fn].apply(null, args)); }, 400);
+      var runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+      runner[fn].apply(runner, args);
+    });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function cleanError(err) {
+    return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, '');
+  }
+  function showError(err) {
+    $('loading').classList.add('hidden');
+    $('error').textContent = cleanError(err);
+    $('error').classList.remove('hidden');
+  }
+  function finish(icon, text, sub) {
+    $('loading').classList.add('hidden');
+    $('doneIcon').textContent = icon;
+    $('doneText').textContent = text;
+    $('doneSub').textContent = sub;
+    $('done').classList.remove('hidden');
+    $('details').classList.remove('hidden');
+  }
+
+  function row(label, value) {
+    var tr = document.createElement('tr');
+    var a = document.createElement('td'); a.textContent = label;
+    var b = document.createElement('td'); b.textContent = value;
+    tr.appendChild(a); tr.appendChild(b);
+    $('details').appendChild(tr);
+  }
+
+  function confirmNow(first) {
+    $('againBtn').classList.add('hidden');
+    $('done').classList.add('hidden');
+    $('loading').textContent = 'Updating your calendar and emailing ' + first + '…';
+    $('loading').classList.remove('hidden');
+    return call('confirmTable', ctx.id, ctx.key).then(function (res) {
+      finish('🎉', 'All done! ' + res.venue + ' is confirmed for ' + res.date + '.',
+        'It’s marked ✅ in your Google Calendar, and ' + first + ' has been emailed at ' + res.email + '. You can close this page.');
+    }).catch(showError);
+  }
+
+  call('getBookingForConfirm', ctx.id, ctx.key).then(function (b) {
+    var first = b.name.split(/\s+/)[0];
+    row('Guest', b.name + (b.phone ? ' · ' + b.phone : ''));
+    row('Date', b.date + ', from ' + b.time);
+    row('Table', b.tableText);
+    row('Place', b.venue.name + (b.venue.address ? ', ' + b.venue.address : ''));
+
+    if (b.cancelled) {
+      finish('🕯️', first + ' cancelled this booking on ' + b.cancelled + '.', 'Nothing was sent. If you’d already booked the table, remember to cancel it.');
+    } else if (b.tableConfirmed) {
+      finish('✅', 'Already confirmed on ' + b.tableConfirmed + '.', first + ' has had their confirmation email. Only send it again if something has changed.');
+      $('againBtn').classList.remove('hidden');
+      $('againBtn').onclick = function () { confirmNow(first); };
+    } else {
+      confirmNow(first);
+    }
+  }).catch(showError);
+</script>
+</body>
+</html>

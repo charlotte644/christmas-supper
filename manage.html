@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<script src="shim.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Christmas Supper with the Warren Family">
+<meta property="og:description" content="Instead of presents this year, come and share a Christmas meal with us — pick your evening here.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Christmas supper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #1b3a28; --pine-deep: #10261a; --berry: #8e1b2c; --berry-soft: #b23a48;
+    --gold: #c9a44c; --gold-light: #f1d98f; --cream: #fbf6ec; --parchment: #f4ead6;
+    --ink: #2a2320; --muted: #6d5f55; --taken: #d9cfbf;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Lato', system-ui, sans-serif; color: var(--ink);
+    background: radial-gradient(ellipse at 50% -10%, rgba(241,217,143,.18), transparent 55%),
+                radial-gradient(circle at 15% 85%, rgba(142,27,44,.35), transparent 45%),
+                linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 36px 16px 48px; }
+  header { text-align: center; color: var(--cream); margin-bottom: 22px; }
+  .eyebrow { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light); }
+  h1 { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(46px, 11vw, 72px); margin: 6px 0 0; line-height: 1; }
+  .card {
+    background: var(--cream); border-radius: 18px; padding: 26px 22px; border: 2px solid var(--gold); margin-bottom: 20px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 0 0 6px var(--cream), inset 0 0 0 7px rgba(201,164,76,.45);
+  }
+  h2 { font-family: 'Cormorant Garamond', serif; color: var(--berry); font-size: 27px; margin: 0 0 14px; text-align: center; }
+  p.lead { font-family: 'Cormorant Garamond', serif; font-size: 20px; text-align: center; margin: 0 0 16px; line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 15px; }
+  td { padding: 7px 0; vertical-align: top; border-bottom: 1px solid #ece2cc; }
+  td:first-child { color: var(--berry); font-weight: 700; width: 80px; padding-right: 12px; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 460px) { .actions { grid-template-columns: 1fr; } }
+  .btn {
+    display: block; width: 100%; cursor: pointer; font: inherit; font-weight: 700; font-size: 16px;
+    padding: 14px 18px; border-radius: 999px; border: 2px solid var(--berry);
+    background: linear-gradient(180deg, var(--berry-soft), var(--berry)); color: var(--cream);
+    box-shadow: 0 8px 18px rgba(142,27,44,.3);
+  }
+  .btn.outline { background: #fff; color: var(--berry); box-shadow: none; }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .btn-ghost { background: none; border: 0; color: var(--berry); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; display: block; margin: 14px auto 0; }
+
+  .month { text-align: center; font-family: 'Cormorant Garamond', serif; color: var(--muted); font-size: 18px; margin-bottom: 14px; }
+  .weekdays, .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
+  .weekdays div { text-align: center; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .day {
+    aspect-ratio: 1 / 1.05; border-radius: 11px; border: 1.5px solid var(--gold); background: #fff; cursor: pointer;
+    font: inherit; color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0;
+  }
+  .day .num { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: clamp(18px, 5vw, 25px); line-height: 1; }
+  .day .tag { font-size: 10px; color: var(--pine); font-weight: 700; }
+  .day:hover:not(:disabled) { background: var(--parchment); }
+  .day.selected { background: var(--berry); border-color: var(--berry); color: var(--cream); }
+  .day.selected .tag { color: var(--gold-light); }
+  .day.current { background: var(--pine); border-color: var(--pine); color: var(--cream); opacity: 1; }
+  .day.current .tag { color: var(--gold-light); }
+  .day:disabled:not(.current) { cursor: not-allowed; background: var(--taken); border-color: var(--taken); color: var(--muted); opacity: .75; }
+  .day:disabled:not(.current) .num { text-decoration: line-through; text-decoration-color: var(--berry-soft); }
+  .blank { aspect-ratio: 1 / 1.05; }
+  .legend { display: flex; justify-content: center; gap: 16px; margin: 14px 0 18px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 13px; height: 13px; border-radius: 4px; vertical-align: -2px; margin-right: 5px; }
+
+  .warn { background: #fdecee; border: 1px solid #f0c2c8; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; color: var(--berry); }
+  .error { background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+  .loading, .done { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 21px; }
+  .done .big { font-size: 52px; }
+  /* ---------- update details & menu ---------- */
+  .saved { background: #e7f1e3; border: 1px solid #a9c4a0; color: var(--pine); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; }
+  label.full, div.full { display: block; margin: 0 0 14px; font-weight: 700; font-size: 14px; color: var(--pine); }
+  label.full input, label.full textarea, #menuText {
+    display: block; width: 100%; margin-top: 6px; font: inherit; font-weight: 400; font-size: 16px; color: var(--ink);
+    padding: 11px 13px; border-radius: 10px; border: 1.5px solid #d8c9a6; background: #fff;
+  }
+  label.full textarea { min-height: 70px; resize: vertical; }
+  #menuText { min-height: 150px; resize: vertical; margin: 0 0 14px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .two label { font-weight: 700; font-size: 14px; color: var(--pine); }
+  select { display: block; width: 100%; margin-top: 6px; font: inherit; font-size: 16px; padding: 10px; border-radius: 10px; border: 1.5px solid #d8c9a6; background: #fff; }
+  .sub-box { margin: -4px 0 14px; padding: 12px 14px; border-radius: 12px; background: #fffdf8; border: 1.5px dashed #e3d4ae; }
+  .mini { font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 8px; }
+  .ages { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .ages label { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+  .ages select, .inline select { width: auto; display: inline-block; margin: 0; padding: 8px 10px; }
+  .inline { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 400; margin-right: 16px; }
+  .inline input { accent-color: var(--berry); }
+  .diet { border: 0; padding: 0; margin: 0 0 14px; }
+  .diet legend { font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 8px; padding: 0; }
+  .diet-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .diet-opts label {
+    display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer;
+    background: #fff; border: 1.5px solid #e3d4ae; border-radius: 999px; padding: 6px 12px;
+  }
+  .diet-opts label:has(input:checked) { border-color: var(--pine); background: #e7f1e3; }
+  .diet-opts input { accent-color: var(--pine); margin: 0; }
+  #eDietOther { display: block; width: 100%; margin-top: 10px; font: inherit; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #d8c9a6; }
+  .lead.small { font-size: 18px; }
+  .center { text-align: center; margin: 0 0 12px; }
+  .center a { color: var(--berry); font-weight: 700; }
+  .back-link { display: block; margin: 14px auto 0; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div id="ctx" data-id="<?= bookingId ?>" data-key="<?= key ?>" data-section="<?= section ?>" hidden></div>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Christmas Supper</div>
+    <h1>Your booking</h1>
+  </header>
+
+  <section class="card">
+    <div id="loading" class="loading">Finding your booking…</div>
+    <div id="error" class="error hidden" role="alert"></div>
+
+    <!-- Overview -->
+    <div id="overview" class="hidden">
+      <div id="saved" class="saved hidden" role="status"></div>
+      <p class="lead" id="hello"></p>
+      <table id="details"></table>
+      <div class="actions">
+        <button class="btn" id="showMove" type="button">📅 Change the date</button>
+        <button class="btn outline" id="showEdit" type="button">✏️ Update my details</button>
+        <button class="btn outline hidden" id="showMenu" type="button">🍽️ Menu choices</button>
+        <button class="btn outline" id="showCancel" type="button">Cancel booking</button>
+      </div>
+    </div>
+
+    <!-- Update details -->
+    <div id="edit" class="hidden">
+      <h2>Update your details</h2>
+      <div class="two">
+        <label>Adults <select id="eAdults"></select></label>
+        <label>Children <select id="eChildren"></select></label>
+      </div>
+      <div id="eChildBox" class="sub-box hidden">
+        <div class="mini">How old are the children?</div>
+        <div id="eAges" class="ages"></div>
+        <label class="inline">Highchairs needed <select id="eHighchairs"></select></label>
+      </div>
+      <fieldset class="diet">
+        <legend>Dietary needs</legend>
+        <div class="diet-opts" id="eDiet"></div>
+        <input id="eDietOther" class="hidden" maxlength="200" placeholder="Other dietary needs" aria-label="Other dietary needs">
+      </fieldset>
+      <label class="full">Mobile number <input id="ePhone" type="tel" inputmode="tel" maxlength="20"></label>
+      <label class="full hidden" id="eFoodWrap">What would you like to eat? <textarea id="eFood" maxlength="400"></textarea></label>
+      <div class="full hidden" id="eStayWrap">
+        <div class="mini">🛏️ Staying the night with us?</div>
+        <label class="inline"><input type="radio" name="eStay" value="yes"> Yes please</label>
+        <label class="inline"><input type="radio" name="eStay" value="no"> No thanks</label>
+      </div>
+      <label class="full">Anything else? <textarea id="eNotes" maxlength="600"></textarea></label>
+      <button class="btn" id="saveEdit" type="button">Save changes</button>
+      <button class="btn-ghost back" type="button">Back</button>
+    </div>
+
+    <!-- Menu choices -->
+    <div id="menu" class="hidden">
+      <h2>Menu choices</h2>
+      <p class="lead small">Lots of restaurants like Christmas orders in advance. Pop everyone’s choices in below — one line per person is perfect — and we’ll pass them on.</p>
+      <p class="center" id="menuSite"></p>
+      <textarea id="menuText" maxlength="1500" placeholder="e.g.&#10;Jo — soup, turkey, Christmas pudding&#10;Sam (age 4) — kids’ pizza, ice cream"></textarea>
+      <button class="btn" id="saveMenu" type="button">Send our choices</button>
+      <button class="btn-ghost back" type="button">Back</button>
+    </div>
+
+    <!-- Change date -->
+    <div id="move" class="hidden">
+      <h2>Pick a new evening</h2>
+      <div class="month" id="monthLabel"></div>
+      <div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+      <div class="grid" id="grid"></div>
+      <div class="legend">
+        <span><i style="background:var(--pine)"></i>Your booking now</span>
+        <span><i style="background:#fff;border:1.5px solid var(--gold)"></i>Available</span>
+        <span><i style="background:var(--taken)"></i>Taken</span>
+      </div>
+      <button class="btn" id="moveBtn" type="button" disabled>Choose an evening above</button>
+      <button class="btn-ghost back" type="button">Back</button>
+    </div>
+
+    <!-- Cancel -->
+    <div id="cancel" class="hidden">
+      <h2>Cancel your supper?</h2>
+      <div class="warn" id="cancelText"></div>
+      <div class="actions">
+        <button class="btn" id="cancelBtn" type="button">Yes, cancel it</button>
+        <button class="btn outline back" type="button">No, keep it</button>
+      </div>
+    </div>
+
+    <!-- Finished -->
+    <div id="done" class="done hidden">
+      <div class="big" id="doneIcon" aria-hidden="true"></div>
+      <p id="doneText"></p>
+      <p style="font-size:17px;color:var(--muted)" id="doneSub"></p>
+    </div>
+  </section>
+</div>
+
+<script>
+  var ctx = document.getElementById('ctx').dataset;
+  // The GitHub copy of this page gets the booking from its own link instead.
+  if (!ctx.id || ctx.id.indexOf('<?') === 0) {
+    var qs = new URLSearchParams(location.search);
+    ctx = { id: qs.get('manage') || '', key: qs.get('key') || '', section: qs.get('section') || '' };
+  }
+  var isLive = typeof google !== 'undefined' && google.script && google.script.run;
+
+  var mock = {
+    getBookingForGuest: function () {
+      var days = [];
+      for (var d = 1; d <= 23; d++) days.push({ day: d, available: [1, 2, 3, 4, 9, 10, 18].indexOf(d) === -1, past: false, restaurantOk: d > 7 });
+      return { name: 'Auntie Jo Smith', guests: 3, party: '2 adults and 1 child', children: 'age 4 · 1 highchair needed', dietary: 'Vegetarian', offeredStay: true, stayOver: true, date: 'Thursday 10 December 2026', time: '6pm', day: 10,
+        venue: { name: 'La Luna', address: '12 High Street, Castleton', website: 'https://example.com' }, cancelled: '',
+        tableConfirmed: '1 Dec 2026', menuChoices: '', whatToBring: 'Your favourite game! 🎲',
+        edit: { adults: 2, children: 1, childAges: [4], highchairs: 1, dietary: ['Vegetarian'], dietaryOther: '',
+          phone: '07700 900123', notes: '', food: '', maxGuests: 12 },
+        calendar: { year: 2026, startLabel: '6pm', hosts: 'The Warren Family', days: days } };
+    },
+    updateBookingDetails: function () { return { changed: true }; },
+    saveMenuChoices: function () { return { sentAt: '1 Dec 2026, 19:05' }; },
+    rescheduleBooking: function (id, key, day) { return { date: longDate(day) + ' 2026', time: '6pm' }; },
+    cancelBooking: function () { return { date: 'Thursday 10 December 2026' }; }
+  };
+
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      if (!isLive) return setTimeout(function () { resolve(mock[fn].apply(null, args)); }, 400);
+      var runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+      runner[fn].apply(runner, args);
+    });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var booking = null;
+  var chosen = null;
+
+  function longDate(day) {
+    var year = booking && booking.calendar ? booking.calendar.year : 2026;
+    return new Date(year, 11, day).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  function cleanError(err) {
+    return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, '');
+  }
+  function showError(err) {
+    $('error').textContent = cleanError(err);
+    $('error').classList.remove('hidden');
+  }
+  function show(id) {
+    ['overview', 'move', 'cancel', 'edit', 'menu', 'done'].forEach(function (s) { $(s).classList.toggle('hidden', s !== id); });
+    $('error').classList.add('hidden');
+    if (id !== 'overview') $('saved').classList.add('hidden');
+  }
+  function finish(icon, text, sub) {
+    $('doneIcon').textContent = icon;
+    $('doneText').textContent = text;
+    $('doneSub').textContent = sub;
+    show('done');
+  }
+
+  function row(label, value) {
+    var tr = document.createElement('tr');
+    var a = document.createElement('td'); a.textContent = label;
+    var b = document.createElement('td'); b.textContent = value;
+    tr.appendChild(a); tr.appendChild(b);
+    $('details').appendChild(tr);
+  }
+
+  function renderGrid() {
+    var cal = booking.calendar;
+    var grid = $('grid');
+    grid.innerHTML = '';
+    var lead = (new Date(cal.year, 11, cal.days[0].day).getDay() + 6) % 7;
+    for (var i = 0; i < lead; i++) grid.appendChild(Object.assign(document.createElement('div'), { className: 'blank' }));
+    cal.days.forEach(function (d) {
+      var isCurrent = d.day === booking.day;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'day' + (isCurrent ? ' current' : '') + (chosen === d.day ? ' selected' : '');
+      // Restaurant bookings need a few days' notice so there's time to book the new table.
+      var tooSoon = !!booking.venue && d.available && d.restaurantOk === false;
+      btn.disabled = isCurrent || !d.available || tooSoon;
+      btn.innerHTML = '<span class="num">' + d.day + '</span><span class="tag">' +
+        (isCurrent ? 'Yours' : tooSoon ? 'Too soon' : d.available ? cal.startLabel : d.past ? 'Passed' : 'Taken') + '</span>';
+      btn.addEventListener('click', function () {
+        chosen = d.day;
+        renderGrid();
+        $('moveBtn').disabled = false;
+        $('moveBtn').textContent = 'Move to ' + longDate(d.day);
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function renderOverview(b) {
+    var first = b.name.split(/\s+/)[0];
+    $('details').innerHTML = '';
+    $('hello').textContent = 'Hello ' + first + ' — here’s your Christmas supper with ' + b.calendar.hosts + '.';
+    row('Date', b.date);
+    row('Time', 'From ' + b.time);
+    row('Party', b.party || (b.guests + (b.guests === 1 ? ' guest' : ' guests')));
+    row('Where', b.venue ? b.venue.name + (b.venue.address ? ', ' + b.venue.address : '')
+      : b.atOurs ? 'At ours 🏡' : 'To be discussed');
+    if (b.children) row('Children', b.children);
+    if (b.dietary) row('Dietary', b.dietary);
+    if (b.atOurs && b.food) row('On the menu', b.food);
+    if (b.atOurs && b.whatToBring) row('Please bring', b.whatToBring);
+    if (b.menuChoices) row('Menu choices', b.menuChoices);
+    if (b.offeredStay) row('Staying over', b.stayOver ? 'Yes 🛏️' : 'No');
+    if (b.awaitingApproval) row('Status', 'We’ll confirm with you very soon, along with our address.');
+    $('showMenu').classList.toggle('hidden', !b.venue);
+    $('monthLabel').textContent = 'December ' + b.calendar.year + ' · evenings from ' + b.calendar.startLabel;
+    $('cancelText').textContent = 'This will cancel your supper on ' + b.date + ' and let ' + b.calendar.hosts +
+      ' know. If you’d rather keep it but on another night, choose “Change the date” instead.';
+    renderGrid();
+  }
+
+  call('getBookingForGuest', ctx.id, ctx.key).then(function (b) {
+    booking = b;
+    $('loading').classList.add('hidden');
+    if (b.cancelled) {
+      finish('🕯️', 'This booking was cancelled on ' + b.cancelled + '.', 'You’re very welcome to book another evening from the original invitation link.');
+      return;
+    }
+    renderOverview(b);
+    // The "Send us your menu choices" button in the table email opens the menu box straight away.
+    if (ctx.section === 'menu' && b.venue) openMenu(); else show('overview');
+  }).catch(function (err) {
+    $('loading').classList.add('hidden');
+    showError(err);
+  });
+
+  function backToOverview(message) {
+    return call('getBookingForGuest', ctx.id, ctx.key).then(function (b) {
+      booking = b;
+      renderOverview(b);
+      show('overview');
+      $('saved').textContent = message;
+      $('saved').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    });
+  }
+
+  // ---------- update my details ----------
+  var DIETS = ['Vegetarian', 'Vegan', 'Gluten-free', 'Dairy-free', 'Nut allergy'];
+
+  function fill(sel, from, to, value, zeroLabel) {
+    sel.innerHTML = '';
+    for (var n = from; n <= to; n++) {
+      var o = document.createElement('option');
+      o.value = n; o.textContent = n === 0 && zeroLabel ? zeroLabel : n;
+      sel.appendChild(o);
+    }
+    sel.value = value;
+  }
+
+  function renderAges(ages) {
+    var n = parseInt($('eChildren').value, 10) || 0;
+    var box = $('eAges');
+    box.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var label = document.createElement('label');
+      label.appendChild(document.createTextNode('Child ' + (i + 1)));
+      var sel = document.createElement('select');
+      var blank = document.createElement('option');
+      blank.value = ''; blank.textContent = 'Age…';
+      sel.appendChild(blank);
+      for (var a = 0; a <= 17; a++) {
+        var o = document.createElement('option');
+        o.value = a; o.textContent = a === 0 ? 'Under 1' : a;
+        sel.appendChild(o);
+      }
+      if (ages && ages[i] !== undefined && ages[i] !== null) sel.value = ages[i];
+      label.appendChild(sel);
+      box.appendChild(label);
+    }
+    var keep = Math.min(parseInt($('eHighchairs').value, 10) || 0, n);
+    fill($('eHighchairs'), 0, n, keep, 'None');
+    $('eChildBox').classList.toggle('hidden', n === 0);
+  }
+
+  function openEdit() {
+    var e = booking.edit;
+    fill($('eAdults'), 1, e.maxGuests, e.adults);
+    fill($('eChildren'), 0, e.maxGuests - 1, e.children);
+    fill($('eHighchairs'), 0, e.children, e.highchairs, 'None');
+    renderAges(e.childAges);
+    $('eDiet').innerHTML = '';
+    DIETS.concat(['Other']).forEach(function (d) {
+      var label = document.createElement('label');
+      var box = document.createElement('input');
+      box.type = 'checkbox'; box.value = d;
+      box.checked = d === 'Other' ? !!e.dietaryOther : e.dietary.indexOf(d) !== -1;
+      if (d === 'Other') {
+        box.id = 'eDietOtherTick';
+        box.addEventListener('change', function () { $('eDietOther').classList.toggle('hidden', !box.checked); });
+      }
+      label.appendChild(box);
+      label.appendChild(document.createTextNode(' ' + d));
+      $('eDiet').appendChild(label);
+    });
+    $('eDietOther').value = e.dietaryOther;
+    $('eDietOther').classList.toggle('hidden', !e.dietaryOther);
+    $('ePhone').value = e.phone;
+    $('eNotes').value = e.notes;
+    $('eFood').value = e.food;
+    $('eFoodWrap').classList.toggle('hidden', !booking.atOurs);
+    $('eStayWrap').classList.toggle('hidden', !booking.offeredStay);
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="eStay"]'), function (r) {
+      r.checked = (r.value === 'yes') === !!booking.stayOver;
+    });
+    show('edit');
+  }
+  $('eChildren').addEventListener('change', function () {
+    var current = Array.prototype.map.call(document.querySelectorAll('#eAges select'), function (s) { return s.value; });
+    renderAges(current);
+  });
+
+  $('saveEdit').addEventListener('click', function () {
+    var ages = Array.prototype.map.call(document.querySelectorAll('#eAges select'), function (s) { return s.value; });
+    var otherTick = $('eDietOtherTick');
+    var form = {
+      adults: $('eAdults').value,
+      children: $('eChildren').value,
+      childAges: ages,
+      highchairs: $('eHighchairs').value || 0,
+      dietary: Array.prototype.map.call(document.querySelectorAll('#eDiet input:checked'), function (c) { return c.value; })
+        .filter(function (d) { return d !== 'Other'; }),
+      dietaryOther: otherTick && otherTick.checked ? $('eDietOther').value.trim() : '',
+      phone: $('ePhone').value.trim(),
+      notes: $('eNotes').value.trim(),
+      food: $('eFood').value.trim(),
+      stayOver: !!document.querySelector('input[name="eStay"][value="yes"]:checked')
+    };
+    var digits = form.phone.replace(/[\s()-]/g, '');
+    var problem = (parseInt(form.adults, 10) + parseInt(form.children, 10) > booking.edit.maxGuests) ? 'That’s a big party! Please get in touch with us directly.'
+      : ages.some(function (a) { return a === ''; }) ? 'Please tell us how old the children are.'
+      : !/^\+?\d{10,15}$/.test(digits) ? 'Please add a mobile number we can reach you on, e.g. 07700 900123.' : '';
+    if (problem) { showError(problem); return; }
+    var btn = $('saveEdit');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    call('updateBookingDetails', ctx.id, ctx.key, form).then(function (res) {
+      return backToOverview(res.changed
+        ? '✅ All saved — we’ve let ' + booking.calendar.hosts + ' know.'
+        : 'Nothing had changed, so there was nothing to save.');
+    }).catch(showError).then(function () {
+      btn.disabled = false;
+      btn.textContent = 'Save changes';
+    });
+  });
+
+  // ---------- menu choices ----------
+  function openMenu() {
+    $('menuText').value = booking.menuChoices || '';
+    var site = $('menuSite');
+    site.innerHTML = '';
+    if (booking.venue && booking.venue.website) {
+      var a = document.createElement('a');
+      a.href = booking.venue.website; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = '📖 See ' + booking.venue.name + '’s menu ↗';
+      site.appendChild(a);
+    }
+    $('saveMenu').textContent = booking.menuChoices ? 'Update our choices' : 'Send our choices';
+    show('menu');
+  }
+  $('saveMenu').addEventListener('click', function () {
+    var text = $('menuText').value.trim();
+    if (!text) { showError('Please add your menu choices — one line per person is perfect.'); return; }
+    var btn = $('saveMenu');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    call('saveMenuChoices', ctx.id, ctx.key, text).then(function () {
+      return backToOverview('🍽️ Thank you — your menu choices are on their way to ' + booking.calendar.hosts + '.');
+    }).catch(showError).then(function () {
+      btn.disabled = false;
+      btn.textContent = 'Update our choices';
+    });
+  });
+
+  $('showEdit').addEventListener('click', openEdit);
+  $('showMenu').addEventListener('click', openMenu);
+  $('showMove').addEventListener('click', function () { show('move'); });
+  $('showCancel').addEventListener('click', function () { show('cancel'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.back'), function (btn) {
+    btn.addEventListener('click', function () { show('overview'); });
+  });
+
+  $('moveBtn').addEventListener('click', function () {
+    var btn = $('moveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Moving your booking…';
+    call('rescheduleBooking', ctx.id, ctx.key, chosen).then(function (res) {
+      finish('📅', 'All moved! See you on ' + res.date + ', from ' + res.time + '.',
+        'A new confirmation is on its way to your inbox.' + (booking.venue ? ' We’ll re-book the table and let you know once it’s done.' : ''));
+    }).catch(function (err) {
+      showError(err);
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+      // refresh the calendar in case that evening has just gone
+      call('getBookingForGuest', ctx.id, ctx.key).then(function (b) { booking = b; chosen = null; renderGrid(); });
+    });
+  });
+
+  $('cancelBtn').addEventListener('click', function () {
+    var btn = $('cancelBtn');
+    btn.disabled = true;
+    btn.textContent = 'Cancelling…';
+    call('cancelBooking', ctx.id, ctx.key).then(function (res) {
+      finish('🕯️', 'Your supper on ' + res.date + ' has been cancelled.',
+        'We’ll miss you! An email confirming the cancellation is on its way.');
+    }).catch(function (err) {
+      showError(err);
+      btn.disabled = false;
+      btn.textContent = 'Yes, cancel it';
+    });
+  });
+</script>
+</body>
+</html>
