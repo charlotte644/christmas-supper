@@ -58,6 +58,17 @@
   .error { background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
   .loading, .done { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 21px; }
   .done .big { font-size: 52px; }
+  select, input[type="file"] {
+    display: block; width: 100%; font: inherit; font-size: 16px; padding: 11px 12px; margin: 0 0 16px;
+    border-radius: 10px; border: 1.5px solid #d8c9a6; background: #fff; color: var(--ink);
+  }
+  input[type="file"] { padding: 10px; font-size: 14px; margin-bottom: 6px; }
+  .hint { font-size: 13px; color: var(--muted); margin: 0 0 18px; }
+  @media (max-width: 520px) {
+    .wrap { padding: 24px 12px 40px; }
+    .card { padding: 20px 16px; }
+    td:first-child { width: 70px; }
+  }
   .hidden { display: none !important; }
 </style>
 </head>
@@ -70,7 +81,7 @@
   </header>
 
   <section class="card">
-    <div id="loading" class="loading">Confirming the booking…</div>
+    <div id="loading" class="loading">Fetching the booking…</div>
     <div id="error" class="error hidden" role="alert"></div>
 
     <div id="done" class="done hidden">
@@ -80,13 +91,23 @@
     </div>
 
     <table id="details" class="hidden"></table>
-    <button class="btn hidden" id="againBtn" type="button">Send the confirmation again</button>
+
+    <!-- The confirmation form -->
+    <div id="form" class="hidden">
+      <div id="already" class="notice hidden"></div>
+      <label for="time">What time is the table booked for?</label>
+      <select id="time"></select>
+
+      <label for="menu">Restaurant’s Christmas menu <small>(optional — PDF or photo)</small></label>
+      <input id="menu" type="file" accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,image/heif">
+      <p class="hint" id="deadlineHint"></p>
+
+      <button class="btn" id="sendBtn" type="button"></button>
+    </div>
   </section>
 </div>
 
 <script>
-  // Opening this page from the ✅ button does the confirming straight away —
-  // no second click. Email link-checkers don't run this script, so they can't trigger it.
   var ctx = document.getElementById('ctx').dataset;
   // The GitHub copy of this page gets the booking from its own link instead.
   if (!ctx.id || ctx.id.indexOf('<?') === 0) {
@@ -97,13 +118,17 @@
 
   var mock = {
     getBookingForConfirm: function () {
-      return { name: 'Auntie Jo Smith', email: 'jo@example.com', guests: 3, date: 'Thursday 10 December 2026', time: '6pm',
-        venue: { name: 'La Luna', address: '12 High Street, Castleton', mapsUrl: '#' },
-        notes: 'One vegetarian', tableConfirmed: '', cancelled: '',
-        tableText: 'Table for 6 — 3 guests, plus 2 adults and 1 child from us' };
+      return { name: 'Mike Jones', email: 'mike@example.com', phone: '07700 900123', guests: 3, date: 'Thursday 10 December 2026',
+        time: '6pm', tableTime: '', venue: { name: 'La Luna', address: '12 High Street, Castleton', mapsUrl: '#' },
+        notes: 'One vegetarian', tableConfirmed: location.hash === '#again' ? '2 Dec 2026, 10:00' : '', cancelled: '',
+        tableText: 'Table for 6 — 2 adults and 1 child, plus 2 adults and 1 child from us',
+        deadline: 'Thursday 3 December', deadlinePassed: false, menuSent: '', startHour: 18 };
     },
-    confirmTable: function () {
-      return { name: 'Auntie Jo Smith', email: 'jo@example.com', date: 'Thursday 10 December 2026', venue: 'La Luna', sentAt: '1 Dec 2026, 19:05' };
+    confirmTable: function (id, key, d) {
+      var h = +d.time.split(':')[0], m = d.time.split(':')[1];
+      return { name: 'Mike Jones', email: 'mike@example.com', date: 'Thursday 10 December 2026',
+        time: (h - 12) + (m !== '00' ? ':' + m : '') + 'pm', venue: 'La Luna', sentAt: '2 Dec 2026, 10:00',
+        menu: d.menu ? 'Christmas menu - La Luna.pdf' : '', updated: location.hash === '#again' };
     }
   };
 
@@ -117,58 +142,89 @@
   }
 
   var $ = function (id) { return document.getElementById(id); };
-  function cleanError(err) {
-    return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, '');
-  }
-  function showError(err) {
-    $('loading').classList.add('hidden');
-    $('error').textContent = cleanError(err);
-    $('error').classList.remove('hidden');
-  }
+  function cleanError(err) { return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, ''); }
+  function showError(err) { $('loading').classList.add('hidden'); $('error').textContent = cleanError(err); $('error').classList.remove('hidden'); }
   function finish(icon, text, sub) {
-    $('loading').classList.add('hidden');
-    $('doneIcon').textContent = icon;
-    $('doneText').textContent = text;
-    $('doneSub').textContent = sub;
-    $('done').classList.remove('hidden');
-    $('details').classList.remove('hidden');
+    $('loading').classList.add('hidden'); $('form').classList.add('hidden');
+    $('doneIcon').textContent = icon; $('doneText').textContent = text; $('doneSub').textContent = sub;
+    $('done').classList.remove('hidden'); $('details').classList.remove('hidden');
   }
-
   function row(label, value) {
     var tr = document.createElement('tr');
     var a = document.createElement('td'); a.textContent = label;
     var b = document.createElement('td'); b.textContent = value;
-    tr.appendChild(a); tr.appendChild(b);
-    $('details').appendChild(tr);
+    tr.appendChild(a); tr.appendChild(b); $('details').appendChild(tr);
   }
+  function label12(h, m) { return (h > 12 ? h - 12 : h) + ':' + ('0' + m).slice(-2) + (h >= 12 ? 'pm' : 'am'); }
 
-  function confirmNow(first) {
-    $('againBtn').classList.add('hidden');
-    $('done').classList.add('hidden');
-    $('loading').textContent = 'Updating your calendar and emailing ' + first + '…';
-    $('loading').classList.remove('hidden');
-    return call('confirmTable', ctx.id, ctx.key).then(function (res) {
-      finish('🎉', 'All done! ' + res.venue + ' is confirmed for ' + res.date + '.',
-        'It’s marked ✅ in your Google Calendar, and ' + first + ' has been emailed at ' + res.email + '. You can close this page.');
-    }).catch(showError);
+  // Read the chosen menu file as base64 so it can be emailed as an attachment.
+  function readMenu() {
+    var file = $('menu').files[0];
+    if (!file) return Promise.resolve(null);
+    if (file.size > 10 * 1024 * 1024) return Promise.reject(new Error('That menu file is over 10MB — please use a smaller one.'));
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve({ name: file.name, type: file.type || 'application/pdf', data: String(r.result).split(',')[1] }); };
+      r.onerror = function () { reject(new Error('We couldn’t read that file — please try another.')); };
+      r.readAsDataURL(file);
+    });
   }
 
   call('getBookingForConfirm', ctx.id, ctx.key).then(function (b) {
     var first = b.name.split(/\s+/)[0];
     row('Guest', b.name + (b.phone ? ' · ' + b.phone : ''));
-    row('Date', b.date + ', from ' + b.time);
+    row('Date', b.date);
     row('Table', b.tableText);
     row('Place', b.venue.name + (b.venue.address ? ', ' + b.venue.address : ''));
+    $('loading').classList.add('hidden');
+    $('details').classList.remove('hidden');
 
     if (b.cancelled) {
-      finish('🕯️', first + ' cancelled this booking on ' + b.cancelled + '.', 'Nothing was sent. If you’d already booked the table, remember to cancel it.');
-    } else if (b.tableConfirmed) {
-      finish('✅', 'Already confirmed on ' + b.tableConfirmed + '.', first + ' has had their confirmation email. Only send it again if something has changed.');
-      $('againBtn').classList.remove('hidden');
-      $('againBtn').onclick = function () { confirmNow(first); };
-    } else {
-      confirmNow(first);
+      return finish('🕯️', first + ' cancelled this booking on ' + b.cancelled + '.', 'Nothing was sent. If you’d already booked the table, remember to cancel it.');
     }
+
+    // Table times from 4pm to 10:45pm, every 15 minutes; starts on the booked time (or 6pm).
+    var chosen = b.tableTime || (('0' + b.startHour).slice(-2) + ':00');
+    for (var h = 16; h <= 22; h++) {
+      [0, 15, 30, 45].forEach(function (m) {
+        var v = ('0' + h).slice(-2) + ':' + ('0' + m).slice(-2);
+        var o = document.createElement('option');
+        o.value = v; o.textContent = label12(h, m);
+        if (v === chosen) o.selected = true;
+        $('time').appendChild(o);
+      });
+    }
+    $('deadlineHint').textContent = b.deadlinePassed
+      ? 'If you add a menu, ' + first + ' will be asked to send their order as soon as they can.'
+      : 'If you add a menu, ' + first + ' will be asked to send their order by ' + b.deadline + ' (7 days before).';
+    if (b.tableConfirmed) {
+      $('already').textContent = 'You confirmed this on ' + b.tableConfirmed + (b.tableTime ? ' for ' + label12(+b.tableTime.split(':')[0], +b.tableTime.split(':')[1]) : '') +
+        '. Sending again emails ' + first + ' an updated confirmation.';
+      $('already').classList.remove('hidden');
+      $('sendBtn').textContent = '✉️ Send ' + first + ' an updated confirmation';
+    } else {
+      $('sendBtn').textContent = '✅ Send ' + first + ' their confirmation';
+    }
+    $('form').classList.remove('hidden');
+
+    $('sendBtn').addEventListener('click', function () {
+      var btn = $('sendBtn');
+      var label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      $('error').classList.add('hidden');
+      readMenu().then(function (menu) {
+        return call('confirmTable', ctx.id, ctx.key, { time: $('time').value, menu: menu });
+      }).then(function (res) {
+        finish('🎉', (res.updated ? 'Update sent! ' : 'All done! ') + res.venue + ' is confirmed for ' + res.date + ' at ' + res.time + '.',
+          first + ' has been emailed at ' + res.email + (res.menu ? ' with the Christmas menu attached' : '') +
+          ', and your Google Calendar shows the new time. You can close this page.');
+      }).catch(function (err) {
+        showError(err);
+        btn.disabled = false;
+        btn.textContent = label;
+      });
+    });
   }).catch(showError);
 </script>
 </body>
