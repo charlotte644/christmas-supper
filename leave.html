@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<script src="shim.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Christmas Supper with the Warren Family">
+<meta property="og:description" content="Instead of presents this year, come and share a Christmas meal with us — pick your evening here.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can’t make it?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #1b3a28; --pine-deep: #10261a; --berry: #8e1b2c; --berry-soft: #b23a48;
+    --gold: #c9a44c; --gold-light: #f1d98f; --cream: #fbf6ec; --parchment: #f4ead6;
+    --ink: #2a2320; --muted: #6d5f55;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Lato', system-ui, sans-serif; color: var(--ink);
+    background: radial-gradient(ellipse at 50% -10%, rgba(241,217,143,.18), transparent 55%),
+                linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 36px 16px 48px; }
+  header { text-align: center; color: var(--cream); margin-bottom: 22px; }
+  .eyebrow { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light); }
+  h1 { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(46px, 11vw, 68px); margin: 6px 0 0; line-height: 1; }
+  .card {
+    background: var(--cream); border-radius: 18px; padding: 26px 22px; border: 2px solid var(--gold);
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 0 0 6px var(--cream), inset 0 0 0 7px rgba(201,164,76,.45);
+  }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 15px; }
+  td { padding: 7px 0; vertical-align: top; border-bottom: 1px solid #ece2cc; }
+  td:first-child { color: var(--berry); font-weight: 700; width: 92px; padding-right: 12px; }
+  p.lead { font-family: 'Cormorant Garamond', serif; font-size: 21px; text-align: center; margin: 0 0 16px; }
+  label { display: block; font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 6px; }
+  label small { font-weight: 400; color: var(--muted); }
+  textarea {
+    display: block; width: 100%; font: inherit; font-size: 16px; padding: 11px 12px; margin: 0 0 16px; min-height: 80px; resize: vertical;
+    border-radius: 10px; border: 1.5px solid #d8c9a6; background: #fff; color: var(--ink);
+  }
+  textarea:focus { outline: none; border-color: var(--berry); box-shadow: 0 0 0 3px rgba(142,27,44,.15); }
+  .btn {
+    display: block; width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 17px;
+    background: linear-gradient(180deg, var(--berry-soft), var(--berry)); color: var(--cream);
+    padding: 15px 20px; border-radius: 999px; box-shadow: 0 8px 18px rgba(142,27,44,.35);
+  }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .ghost { display: block; text-align: center; margin-top: 14px; color: var(--pine); font-weight: 700; }
+  .error { background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+  .loading, .done { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 21px; }
+  .done .big { font-size: 52px; }
+  .pill {
+    display: inline-block; margin-top: 8px; padding: 11px 20px; border-radius: 999px; text-decoration: none; font: 700 15px 'Lato', sans-serif;
+    background: var(--berry); color: var(--cream);
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 24px 12px 40px; }
+    .card { padding: 20px 16px; }
+    td:first-child { width: 70px; }
+  }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div id="ctx" data-id="<?= joinId ?>" data-key="<?= key ?>" hidden></div>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Join us there</div>
+    <h1>Can’t make it?</h1>
+  </header>
+
+  <section class="card">
+    <div id="loading" class="loading">Finding your place…</div>
+    <div id="error" class="error hidden" role="alert"></div>
+
+    <div id="done" class="done hidden">
+      <div class="big" id="doneIcon" aria-hidden="true">💌</div>
+      <p id="doneText"></p>
+      <p style="font-size:17px;color:var(--muted)" id="doneSub"></p>
+      <a class="pill hidden" id="supperLink" href="#">🎄 Pick an evening for supper</a>
+    </div>
+
+    <table id="details" class="hidden"></table>
+
+    <div id="form" class="hidden">
+      <p class="lead">No problem at all — plans change! Just let us know below.</p>
+      <label for="message">A message for us <small>(optional)</small></label>
+      <textarea id="message" maxlength="600" placeholder="e.g. So sorry, the little one’s poorly — another time!"></textarea>
+      <button class="btn" id="cancelBtn" type="button">I can’t make it after all</button>
+      <a class="ghost" id="keepLink" href="#">Oops — I can still come</a>
+    </div>
+  </section>
+</div>
+
+<script>
+  var ctx = document.getElementById('ctx').dataset;
+  // The GitHub copy of this page gets the booking from its own link instead.
+  if (!ctx.id || ctx.id.indexOf('<?') === 0) {
+    var qs = new URLSearchParams(location.search);
+    ctx = { id: qs.get('leave') || '', key: qs.get('key') || '' };
+  }
+  var isLive = typeof google !== 'undefined' && google.script && google.script.run;
+
+  var mock = {
+    getJoinForGuest: function () {
+      return { name: 'Emma Price', date: 'Saturday 19 December 2026', titles: 'Illuminated Palace light trail', party: '2 adults and 1 child',
+        cancelled: location.hash === '#cancelled' ? '3 Dec 2026, 10:00' : '', meetTime: '4:30pm', meetWhere: 'Main gate', past: false,
+        hosts: 'The Warren Family', pageUrl: 'https://charlotte644.github.io/christmas-supper/' };
+    },
+    cancelJoin: function () { return { date: 'Saturday 19 December 2026', titles: 'Illuminated Palace light trail' }; }
+  };
+
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      if (!isLive) return setTimeout(function () { resolve(mock[fn].apply(null, args)); }, 400);
+      var runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+      runner[fn].apply(runner, args);
+    });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function cleanError(err) { return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, ''); }
+  function showError(err) { $('loading').classList.add('hidden'); $('error').textContent = cleanError(err); $('error').classList.remove('hidden'); }
+  function finish(icon, text, sub, pageUrl) {
+    $('loading').classList.add('hidden'); $('form').classList.add('hidden');
+    $('doneIcon').textContent = icon; $('doneText').textContent = text; $('doneSub').textContent = sub;
+    if (pageUrl) { $('supperLink').href = pageUrl; $('supperLink').classList.remove('hidden'); }
+    $('done').classList.remove('hidden');
+  }
+  function row(label, value) {
+    var tr = document.createElement('tr');
+    var a = document.createElement('td'); a.textContent = label;
+    var b = document.createElement('td'); b.textContent = value;
+    tr.appendChild(a); tr.appendChild(b); $('details').appendChild(tr);
+  }
+
+  call('getJoinForGuest', ctx.id, ctx.key).then(function (j) {
+    row('Day out', j.titles);
+    row('Date', j.date);
+    if (j.meetTime) row('Meeting', j.meetTime + (j.meetWhere ? ' at ' + j.meetWhere : ''));
+    row('Party', j.party);
+    $('loading').classList.add('hidden');
+    $('details').classList.remove('hidden');
+
+    if (j.cancelled) return finish('🕯️', 'You let us know on ' + j.cancelled + ' — you’re not down to join us that day.', 'See you at a supper instead, we hope!', j.pageUrl);
+    if (j.past) return finish('🎄', 'That day has been and gone.', 'Thanks for checking!', '');
+
+    $('keepLink').href = j.pageUrl;
+    $('keepLink').addEventListener('click', function (e) {
+      e.preventDefault();
+      finish('🎉', 'Wonderful — nothing’s changed, see you there!', 'You can close this page.', '');
+    });
+    $('form').classList.remove('hidden');
+
+    $('cancelBtn').addEventListener('click', function () {
+      var btn = $('cancelBtn');
+      btn.disabled = true;
+      btn.textContent = 'Letting them know…';
+      $('error').classList.add('hidden');
+      call('cancelJoin', ctx.id, ctx.key, $('message').value.trim()).then(function (res) {
+        finish('💌', res.already ? 'You’d already let us know — all sorted.' : 'Thanks for letting us know — we’ll miss you on ' + res.date + '!',
+          'We’ve been told, and an email is on its way to you. We’d still love to see you this Christmas.', j.pageUrl);
+      }).catch(function (err) {
+        showError(err);
+        btn.disabled = false;
+        btn.textContent = 'I can’t make it after all';
+      });
+    });
+  }).catch(showError);
+</script>
+</body>
+</html>
