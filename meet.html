@@ -118,7 +118,7 @@
         message: 'Can’t wait!', date: 'Saturday 19 December 2026', titles: 'Illuminated Palace light trail',
         outings: [{ title: 'Illuminated Palace light trail', place: 'Bishop’s Palace & Gardens, Wells', when: 'Evening, until 8pm' }],
         cancelled: '', meetTime: '', meetWhere: '', meetNote: '', confirmedAt: location.hash === '#again' ? '2 Dec 2026, 10:00' : '',
-        suggestedTime: '16:30', suggestedWhere: 'Bishop’s Palace & Gardens, Wells' };
+        suggestedTime: '10:00', suggestedWhere: 'Bishop’s Palace & Gardens, Wells', leaveBy: location.hash === '#supper' ? '15:00' : '' };
     },
     confirmMeetup: function (id, key, d) {
       return { name: 'Emma Price', email: 'emma@example.com', date: 'Saturday 19 December 2026', time: label12(+d.time.split(':')[0], +d.time.split(':')[1]),
@@ -158,6 +158,8 @@
     row('Day out', j.outings.length ? j.outings.map(function (o) { return o.title + ' — ' + o.place; }).join(' + ') : j.titles);
     row('Party', j.party);
     if (j.message) row('Message', j.message);
+    if (j.leaveBy) row('Heads-up', 'You’ve a supper that evening, so ' + first + ' has been told you’ll head off by ' +
+      label12(+j.leaveBy.split(':')[0], +j.leaveBy.split(':')[1]) + '.');
     $('loading').classList.add('hidden');
     $('details').classList.remove('hidden');
 
@@ -170,6 +172,7 @@
     for (var h = 7; h <= 20; h++) {
       [0, 15, 30, 45].forEach(function (m) {
         var v = ('0' + h).slice(-2) + ':' + ('0' + m).slice(-2);
+        if (j.leaveBy && v >= j.leaveBy) return;   // nothing after you'd need to leave for the supper
         var o = document.createElement('option');
         o.value = v; o.textContent = label12(h, m);
         if (v === chosen) o.selected = true;

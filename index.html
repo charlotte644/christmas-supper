@@ -380,6 +380,7 @@
   .join-outing span { font-size: 13px; color: var(--muted); }
   .join-outing a { font-size: 13px; color: var(--berry); font-weight: 700; }
   .join-box .row-even { margin-bottom: 10px; }
+  .join-leave { font-size: 14px; background: var(--parchment); border-left: 4px solid var(--gold); border-radius: 8px; padding: 9px 12px; margin: 0 0 10px; color: var(--ink); }
   .join-box textarea { width: 100%; min-height: 64px; margin-bottom: 10px; }
   .join-box .join-phone { width: 100%; margin-bottom: 10px; }
   .join-nums { display: flex; gap: 10px; margin-bottom: 10px; }
@@ -632,7 +633,7 @@
     </div>
     <div id="joinBox" class="join-box hidden" role="region" aria-labelledby="joinTitle">
       <div class="stay-q" id="joinTitle"></div>
-      <p class="wait-note">We’re not hosting a supper that day — we’re off out! Fancy coming along? Leave your details and we’ll email you the time and where to meet.</p>
+      <p class="wait-note">We’re off out for the day — fancy coming along? Leave your details and we’ll email you the time and where to meet.</p>
       <div id="joinOutings"></div>
       <div id="joinError" class="error hidden" role="alert"></div>
       <div id="joinForm">
@@ -877,7 +878,8 @@
       var taken = [1, 2, 3, 4, 9, 12, 18];
       var days = [];
       for (var d = 1; d <= 23; d++) days.push({ day: d, available: taken.indexOf(d) === -1 && d !== 19, past: false, restaurantOk: d > 7, waitable: d === 12 || d === 18,
-        join: d === 19 ? [{ title: 'Example light trail', place: 'A lovely garden', url: 'https://example.com', emoji: '💡', dogs: 'yes' }] : [] });
+        join: d === 19 ? [{ title: 'Example light trail', place: 'A lovely garden', url: 'https://example.com', emoji: '💡', dogs: 'yes' }] : [],
+        leaveBy: d === 19 ? '3pm' : '' });
       return { year: 2026, hosts: 'The Warren Family', startLabel: '6pm', maxGuests: 12, noticeDays: 3,
         closed: location.hash === '#closed', pageUrl: 'https://script.google.com/macros/s/EXAMPLE/exec',
         whatToBring: 'Your favourite game! 🎲', days: days };
@@ -1024,7 +1026,9 @@
         '<b>' + joinEsc(o.title) + '</b><span>' + joinEsc(o.place) + (o.dogs === 'yes' ? ' · 🐕 dog-friendly' : '') + '</span>' +
         (o.url ? '<br><a href="' + joinEsc(o.url) + '" target="_blank" rel="noopener">Have a look ↗</a>' : '') +
       '</div></div>';
-    }).join('');
+    }).join('') + (d.leaveBy
+      ? '<p class="join-leave">🕒 Just so you know — we’ve got a Christmas supper that evening, so we’ll need to head off by <b>' +
+        joinEsc(d.leaveBy) + '</b>. We hope that’s OK, and we’d love to make the most of the time together before then!</p>' : '');
     $('joinError').classList.add('hidden');
     $('joinDone').classList.add('hidden');
     $('joinForm').classList.remove('hidden');
