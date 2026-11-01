@@ -383,6 +383,24 @@
   .join-leave { font-size: 14px; background: var(--parchment); border-left: 4px solid var(--gold); border-radius: 8px; padding: 9px 12px; margin: 0 0 10px; color: var(--ink); }
   .join-box textarea { width: 100%; min-height: 64px; margin-bottom: 10px; }
   .join-box .join-phone { width: 100%; margin-bottom: 10px; }
+
+  /* ---------- private link: who's booked ---------- */
+  .day .who { display: block; max-width: 100%; padding: 0 3px; font-size: 9.5px; line-height: 1.2; font-weight: 700; color: var(--berry);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .day.joinday .who, .day.waitlist .who { color: var(--pine); }
+  .day.has-who { cursor: pointer; }
+  .fam-who { margin-top: 18px; border-top: 1px dashed var(--gold); padding-top: 14px; }
+  .fam-who h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--berry); margin: 0 0 2px; }
+  .fam-who .sub { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
+  .fam-who-day { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 2px 12px; padding: 9px 0; border-bottom: 1px solid #ece2cc; scroll-margin-top: 90px; }
+  .fam-who-day.flash { background: #fff7e0; }
+  .fam-who-day .d { font-weight: 700; color: var(--pine); font-size: 14px; }
+  .fam-who-day .e { font-size: 14px; line-height: 1.45; margin-bottom: 4px; }
+  .fam-who-day .e small { display: block; color: var(--muted); font-size: 12.5px; }
+  @media (max-width: 520px) {
+    .day .who { font-size: 8px; padding: 0 1px; }
+    .fam-who-day { grid-template-columns: 1fr; }
+  }
   .join-nums { display: flex; gap: 10px; margin-bottom: 10px; }
   .join-nums label { flex: 1; font-size: 13px; color: var(--muted); margin: 0; }
   .join-nums select { width: 100%; margin-top: 4px; }
@@ -455,7 +473,7 @@
 
   /* ---------- private "things to do" panel (only with your secret ?family= link) ---------- */
   .fam-toggle {
-    position: fixed; top: 14px; right: 14px; z-index: 30; display: flex; align-items: center; gap: 8px;
+    position: fixed; top: 76px; right: 14px; z-index: 30; display: flex; align-items: center; gap: 8px;
     padding: 10px 16px; border-radius: 999px; border: 1px solid var(--gold); cursor: pointer;
     background: var(--berry); color: var(--cream); font: 700 14px 'Lato', sans-serif;
     box-shadow: 0 6px 18px rgba(0,0,0,.3);
@@ -616,6 +634,8 @@
         <span><i class="wait"></i>Taken — tap to join the waiting list</span>
         <span id="joinLegend" class="hidden"><i class="joinus"></i>We’re out for the day — tap to join us there</span>
       </div>
+      <!-- Private link only: who has booked what (filled from the script after it checks your key) -->
+      <div id="famWho" class="fam-who hidden" aria-label="Who’s booked"></div>
     </div>
     <div id="waitBox" class="wait-box hidden" role="region" aria-labelledby="waitTitle">
       <div class="stay-q" id="waitTitle"></div>
@@ -966,7 +986,22 @@
         (d.available ? '<span class="from">from </span>' + data.startLabel : join ? 'Join us' : wait ? 'Waitlist' : (d.past ? 'Passed' : 'Taken')) + '</span>';
       btn.setAttribute('aria-label', longDate(d.day) +
         (d.available ? ', available' : join ? ', we’re out for the day — join us there' : wait ? ', taken — join the waiting list' : ', not available'));
-      btn.addEventListener('click', function () { if (join) openJoin(d); else if (wait) openWaitlist(d.day); else choose(d.day); });
+      // Private link only: who's booked that day, and taken days jump to their details below.
+      var who = state.famBookings && state.famBookings[d.day];
+      if (who) {
+        var label = who.suppers.map(function (s) { return s.name.split(/\s+(?:and|&)\s+|\s*,\s*|\s+/)[0]; })
+          .concat(who.outings.length ? ['🎄'] : []).join(' · ');
+        var tag = document.createElement('span');
+        tag.className = 'who';
+        tag.textContent = label;
+        btn.appendChild(tag);
+        btn.classList.add('has-who');
+        if (btn.disabled) { btn.disabled = false; btn.setAttribute('aria-disabled', 'true'); }
+      }
+      btn.addEventListener('click', function () {
+        if (who && !d.available && !join && !wait) return showWho(d.day);
+        if (join) openJoin(d); else if (wait) openWaitlist(d.day); else choose(d.day);
+      });
       grid.appendChild(btn);
     });
   }
@@ -1007,6 +1042,43 @@
       err.classList.remove('hidden');
     }).then(function () { btn.disabled = false; });
   });
+
+  // ---------- private link: who's booked ----------
+  function showWho(day) {
+    var row = document.getElementById('who-' + day);
+    if (!row) return;
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    row.classList.add('flash');
+    setTimeout(function () { row.classList.remove('flash'); }, 1600);
+  }
+
+  function renderWho(list) {
+    var esc = function (s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    };
+    state.famBookings = {};
+    list.forEach(function (d) { state.famBookings[d.day] = d; });
+    var short = function (day) { return new Date(state.data ? state.data.year : 2026, 11, day).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); };
+    $('famWho').innerHTML = '<h3>Who’s booked</h3><p class="sub">Only you can see this (your private link). Tap a name on the calendar to jump to it.</p>' +
+      (list.length ? list.map(function (d) {
+        return '<div class="fam-who-day" id="who-' + d.day + '"><div class="d">' + esc(short(d.day)) + '</div><div>' +
+          d.suppers.map(function (s) {
+            return '<div class="e">🍽️ <b>' + esc(s.name) + '</b> (' + esc(s.party) + ') · ' + esc(s.time) +
+              '<small>' + esc(s.where) + ' · ' + esc(s.status) + (s.phone ? ' · ' + esc(s.phone) : '') + '</small></div>';
+          }).join('') +
+          d.outings.map(function (o) {
+            return '<div class="e">' + esc(o.emoji) + ' <b>' + esc(o.title) + '</b> · ' + esc(o.when) + '<small>' + esc(o.place) + '</small></div>';
+          }).join('') +
+          (d.joiners.length ? '<div class="e">👥 Joining you: ' + d.joiners.map(function (j) {
+            return '<b>' + esc(j.name) + '</b> (' + esc(j.party) + (j.meet ? ', meet ' + esc(j.meet) : ', time not sent yet') + ')';
+          }).join('; ') + '</div>' : '') +
+        '</div></div>';
+      }).join('') : '<p class="sub">Nothing booked yet.</p>');
+    $('famWho').classList.remove('hidden');
+    if (state.data) renderCalendar();
+  }
 
   // ---------- join us on a day out ----------
   function joinEsc(s) {
@@ -1685,6 +1757,11 @@
             url: 'https://example.com', clash: '6:00pm Example supper' }
         ] }
       ],
+      bookings: [
+        { day: 9, suppers: [{ name: 'Sample Guest', party: '2 adults', where: 'At ours', time: '6pm', status: 'Approved', phone: '07700 900000' }], outings: [], joiners: [] },
+        { day: 19, suppers: [], outings: [{ title: 'Example light trail', place: 'A lovely garden', emoji: '💡', when: '4:30pm–7:30pm' }],
+          joiners: [{ name: 'Another Guest', party: '2 adults and 1 child', meet: '' }] }
+      ],
       todos: { today: '2026-11-20', sections: [
         { id: 'gifts', emoji: '🎁', title: 'Example gifts', items: [
           { id: 't1', title: 'Make a list', due: '2026-11-15', dueLabel: 'Sun 15 Nov', done: '', note: '' },
@@ -1869,6 +1946,7 @@
     famCall('getFamilyIdeas', famKey).then(function (res) {
       fam.groups = res.groups;
       fam.todos = res.todos;
+      if (res.bookings) renderWho(res.bookings);
       $('famToggle').classList.remove('hidden');
       $('famPanel').classList.remove('hidden');
       render();
@@ -1915,6 +1993,7 @@
         fam.saving = '';
         fam.groups = res.groups;
         if (res.todos) fam.todos = res.todos;
+        if (res.bookings) renderWho(res.bookings);
         render();
         loadAvailability();   // that day now shows as Taken (or free again) on the supper calendar
       }, function (err) {
