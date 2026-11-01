@@ -506,6 +506,35 @@
   .fam-badge.dog-no { background: #f6dcdc; color: #8e1b2c; }
   .fam-busy { font-size: 12px; color: #6b4e00; background: #fbf3dc; border-radius: 8px; padding: 5px 8px; margin-top: 8px; }
   .fam-check { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+  .fam-clash { font-size: 12px; color: var(--berry); background: #fdecee; border-radius: 8px; padding: 5px 8px; margin-top: 8px; }
+  .fam-ideas-view { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .fam-tabs { display: flex; gap: 6px; padding: 10px 14px 0; }
+  .fam-tab {
+    flex: 1; padding: 8px 10px; border-radius: 10px 10px 0 0; border: 1px solid var(--taken); border-bottom: 0;
+    background: var(--parchment); font: 700 13px 'Lato', sans-serif; color: var(--muted); cursor: pointer;
+  }
+  .fam-tab[aria-selected="true"] { background: #fff; color: var(--pine); }
+  .fam-todo-view { flex: 1; overflow-y: auto; padding: 12px 14px 28px; border-top: 1px solid var(--taken); -webkit-overflow-scrolling: touch; }
+  .fam-progress { height: 8px; border-radius: 99px; background: var(--parchment); overflow: hidden; }
+  .fam-progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, #4f7d5c, var(--pine)); transition: width .3s; }
+  .fam-progress-text { font-size: 12.5px; color: var(--muted); margin: 6px 0 4px; }
+  .fam-hide-done { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); margin: 0 0 4px; cursor: pointer; }
+  .fam-hide-done input { width: auto; margin: 0; accent-color: var(--pine); }
+  .fam-todo-sec h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--berry); margin: 16px 0 4px; }
+  .fam-todo-sec h3 small { font-family: 'Lato', sans-serif; font-size: 12px; color: var(--muted); font-weight: 400; }
+  .fam-todo { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; margin: 5px 0; background: #fff; border: 1px solid var(--taken); border-radius: 10px; cursor: pointer; }
+  .fam-todo input { width: 18px; height: 18px; margin: 2px 0 0; flex: none; accent-color: var(--pine); cursor: pointer; }
+  .fam-todo .t { font-size: 14px; color: var(--ink); line-height: 1.35; }
+  .fam-todo .n { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .fam-todo .by { margin-left: auto; flex: none; font-size: 11.5px; font-weight: 700; color: var(--pine); background: var(--parchment); border-radius: 99px; padding: 2px 8px; white-space: nowrap; }
+  .fam-todo .by.late { background: #fdecee; color: var(--berry); }
+  .fam-todo.done { opacity: .55; }
+  .fam-todo.done .t { text-decoration: line-through; }
+  .fam-todo .del { flex: none; border: 0; background: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 0 2px; }
+  .fam-add { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+  .fam-add input { flex: 1 1 160px; min-width: 0; font: inherit; font-size: 14px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid var(--taken); }
+  .fam-add input[type="date"] { flex: 0 1 140px; }
+  .fam-add button { padding: 8px 14px; border-radius: 10px; border: 0; background: var(--pine); color: var(--cream); font: 700 14px 'Lato', sans-serif; cursor: pointer; }
   .fam-joiners { font-size: 12.5px; background: #e7f1e3; color: var(--pine); border-radius: 8px; padding: 6px 9px; margin-top: 8px; line-height: 1.5; }
   .fam-joiners a { color: var(--berry); font-weight: 700; }
   .fam-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
@@ -812,6 +841,22 @@
     </div>
     <button type="button" class="fam-close" id="famClose" aria-label="Close">×</button>
   </div>
+  <div class="fam-tabs" role="tablist" aria-label="Panel">
+    <button type="button" class="fam-tab" role="tab" id="famTabIdeas" aria-selected="true" aria-controls="famIdeasView">🎄 Days out</button>
+    <button type="button" class="fam-tab" role="tab" id="famTabTodo" aria-selected="false" aria-controls="famTodoView">✅ To-do <span id="famTodoCount"></span></button>
+  </div>
+  <div id="famTodoView" class="fam-todo-view hidden" role="tabpanel" aria-labelledby="famTabTodo">
+    <div class="fam-progress"><div class="fam-progress-bar" id="famTodoBar"></div></div>
+    <p class="fam-progress-text" id="famTodoText"></p>
+    <label class="fam-hide-done"><input type="checkbox" id="famHideDone"> Hide what’s done</label>
+    <div id="famTodoList"></div>
+    <div class="fam-add">
+      <input id="famAddText" maxlength="140" placeholder="Add something else to do…" aria-label="New to-do">
+      <input id="famAddDate" type="date" aria-label="Do it by (optional)">
+      <button type="button" id="famAddBtn">Add</button>
+    </div>
+  </div>
+  <div id="famIdeasView" role="tabpanel" aria-labelledby="famTabIdeas" class="fam-ideas-view">
   <div class="fam-filters" role="group" aria-label="Show">
     <button type="button" class="fam-chip" data-filter="all" aria-pressed="true">All</button>
     <button type="button" class="fam-chip" data-filter="dogs" aria-pressed="false">🐕 Dog friendly</button>
@@ -819,6 +864,7 @@
     <button type="button" class="fam-chip" data-filter="free" aria-pressed="false">£0 Free</button>
   </div>
   <div class="fam-list" id="famList"><p class="fam-empty">Loading ideas…</p></div>
+  </div>
 </aside>
 
 <script>
@@ -1629,17 +1675,36 @@
             toddler: 'Buggy-friendly path', url: 'https://example.com', busy: ['5:00pm Example plan'] },
           { id: 'demo2', date: '2026-11-08', day: 'Sun 8 Nov', emoji: '🚂', title: 'Example Santa train',
             place: 'A railway', drive: '30 min', when: '11am', start: '11:00', end: '13:00', price: '£15 adult · £12 child · under-2s free',
-            dogs: 'no', dogNote: 'No dogs on board', toddler: 'Gift for under-2s too', url: 'https://example.com', check: true, going: true }
+            dogs: 'no', dogNote: 'No dogs on board', toddler: 'Gift for under-2s too', url: 'https://example.com', check: true, going: true },
+          { id: 'demo3', date: '2026-11-08', day: 'Sun 8 Nov', emoji: '💡', title: 'Example evening light trail',
+            place: 'A park', drive: '40 min', when: 'Evening', start: '16:30', end: '18:30', price: '£20', dogs: 'some', dogNote: 'Dog nights only',
+            url: 'https://example.com', clash: '6:00pm Example supper' }
         ] }
-      ]
+      ],
+      todos: { today: '2026-11-20', sections: [
+        { id: 'gifts', emoji: '🎁', title: 'Example gifts', items: [
+          { id: 't1', title: 'Make a list', due: '2026-11-15', dueLabel: 'Sun 15 Nov', done: '', note: '' },
+          { id: 't2', title: 'Buy the gifts', due: '2026-11-29', dueLabel: 'Sun 29 Nov', done: '', note: 'Black Friday is Fri 27 Nov' },
+          { id: 't3', title: 'Wrap them', due: '2026-12-20', dueLabel: 'Sun 20 Dec', done: '2 Nov', note: '' }
+        ] }
+      ] }
     };
 
     function famCall(fn) {
       var args = Array.prototype.slice.call(arguments, 1);
       return new Promise(function (resolve, reject) {
         if (!isLive) {
+          var todoItems = function () { var all = []; mockIdeas.todos.sections.forEach(function (s) { all = all.concat(s.items); }); return all; };
           if (fn === 'setFamilyGoing') mockIdeas.groups.forEach(function (g) { g.items.forEach(function (it) { if (it.id === args[1]) it.going = args[2]; }); });
-          return setTimeout(function () { resolve(JSON.parse(JSON.stringify(mockIdeas))); }, 400);
+          if (fn === 'setFamilyTodo') todoItems().forEach(function (it) { if (it.id === args[1]) it.done = args[2] ? 'today' : ''; });
+          if (fn === 'addFamilyTodo') {
+            var mine = mockIdeas.todos.sections.filter(function (s) { return s.id === 'mine'; })[0];
+            if (!mine) { mine = { id: 'mine', emoji: '✍️', title: 'Added by us', items: [] }; mockIdeas.todos.sections.push(mine); }
+            mine.items.push({ id: 'u' + Date.now(), title: args[1], due: args[2], dueLabel: args[2], done: '', custom: true });
+          }
+          if (fn === 'removeFamilyTodo') mockIdeas.todos.sections.forEach(function (s) { s.items = s.items.filter(function (it) { return it.id !== args[1]; }); });
+          var reply = /Todo$/.test(fn) ? mockIdeas.todos : mockIdeas;
+          return setTimeout(function () { resolve(JSON.parse(JSON.stringify(reply))); }, 300);
         }
         var run = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
         run[fn].apply(run, args);
@@ -1667,8 +1732,10 @@
         ? '<div class="fam-busy">📅 Already in your calendar that day: ' + it.busy.map(esc).join(' · ') + '</div>' : '';
       var btn = it.past ? '' : it.going
         ? '<a href="#" class="primary" data-going="0" data-id="' + esc(it.id) + '">✅ We’re going — undo</a>'
-        : '<a href="#" data-going="1" data-id="' + esc(it.id) + '">🎄 We’re going</a>';
+        : it.clash ? '' : '<a href="#" data-going="1" data-id="' + esc(it.id) + '">🎄 We’re going</a>';
       if (fam.saving === it.id) btn = '<a href="#" aria-disabled="true">Saving…</a>';
+      var clash = !it.past && !it.going && it.clash
+        ? '<div class="fam-clash">⛔ Clashes with ' + esc(it.clash) + ' (allowing an hour to get there and back), so it can’t be booked.</div>' : '';
       return '<article class="fam-item' + (weekday ? ' weekday' : '') + (it.past ? ' past' : '') + '">' +
         '<div class="fam-top"><span class="fam-emoji" aria-hidden="true">' + esc(it.emoji || '🎄') + '</span><div>' +
           '<p class="fam-title">' + esc(it.title) + '</p>' +
@@ -1682,7 +1749,7 @@
           (it.dogNote ? '<span class="fam-badge">' + esc(it.dogNote) + '</span>' : '') +
         '</div>' +
         (it.check ? '<div class="fam-check">2026 details still to be confirmed — check the link before going.</div>' : '') +
-        busy +
+        busy + clash +
         (it.going && it.joinable && !it.past ? '<div class="fam-check">Guests now see “Join us” on this day on the supper calendar.</div>' : '') +
         ((it.joiners || []).length ? '<div class="fam-joiners">👥 <b>Joining you:</b>' + it.joiners.map(function (j) {
           return '<div>' + esc(j.name) + ' (' + esc(j.party) + ') — ' +
@@ -1715,11 +1782,96 @@
       try { localStorage.setItem('famPanel', open ? 'open' : 'closed'); } catch (e) { /* private mode */ }
     }
 
+    // ---------- the To-do tab ----------
+    function todoHtml(it, today) {
+      var late = !it.done && it.due && it.due < today;
+      return '<label class="fam-todo' + (it.done ? ' done' : '') + '">' +
+        '<input type="checkbox" data-todo="' + esc(it.id) + '"' + (it.done ? ' checked' : '') + (fam.todoSaving ? ' disabled' : '') + '>' +
+        '<span class="t">' + esc(it.title) + (it.note ? '<span class="n">' + esc(it.note) + '</span>' : '') +
+          (it.done ? '<span class="n">✓ Done ' + esc(it.done) + '</span>' : '') + '</span>' +
+        (it.dueLabel ? '<span class="by' + (late ? ' late' : '') + '">' + (late ? 'was due ' : 'by ') + esc(it.dueLabel) + '</span>' : '') +
+        (it.custom ? '<button type="button" class="del" data-del="' + esc(it.id) + '" aria-label="Remove">×</button>' : '') +
+      '</label>';
+    }
+
+    function renderTodos() {
+      var t = fam.todos;
+      if (!t) return;
+      var all = [], done = 0;
+      t.sections.forEach(function (s) { s.items.forEach(function (it) { all.push(it); if (it.done) done++; }); });
+      var hide = $('famHideDone').checked;
+      $('famTodoBar').style.width = (all.length ? Math.round(done / all.length * 100) : 0) + '%';
+      $('famTodoText').textContent = done + ' of ' + all.length + ' done' + (done === all.length && all.length ? ' — the house is Christmas-ready! 🎉' : '');
+      $('famTodoCount').textContent = '(' + (all.length - done) + ')';
+      $('famTodoList').innerHTML = t.sections.map(function (s) {
+        var items = s.items.slice().sort(function (a, b) { return (a.due || '9') < (b.due || '9') ? -1 : 1; })
+          .filter(function (it) { return !hide || !it.done; });
+        var left = s.items.filter(function (it) { return !it.done; }).length;
+        if (!items.length && hide) return '';
+        return '<section class="fam-todo-sec"><h3>' + esc(s.emoji + ' ' + s.title) + ' <small>' +
+          (left ? left + ' to do' : 'all done ✓') + '</small></h3>' + items.map(function (it) { return todoHtml(it, t.today); }).join('') + '</section>';
+      }).join('');
+    }
+
+    function todoCall(fn) {
+      fam.todoSaving = true;
+      renderTodos();
+      return famCall.apply(null, arguments).then(function (todos) {
+        fam.todoSaving = false;
+        fam.todos = todos;
+        renderTodos();
+      }, function (err) {
+        fam.todoSaving = false;
+        renderTodos();
+        alert('Sorry — that didn’t save: ' + cleanError(err));
+      });
+    }
+
+    $('famTodoList').addEventListener('change', function (e) {
+      var box = e.target.closest('input[data-todo]');
+      if (box) todoCall('setFamilyTodo', famKey, box.getAttribute('data-todo'), box.checked);
+    });
+    $('famTodoList').addEventListener('click', function (e) {
+      var del = e.target.closest('button[data-del]');
+      if (!del) return;
+      e.preventDefault();
+      if (confirm('Remove this to-do?')) todoCall('removeFamilyTodo', famKey, del.getAttribute('data-del'));
+    });
+    $('famAddBtn').addEventListener('click', function () {
+      var text = $('famAddText').value.trim();
+      if (!text) { $('famAddText').focus(); return; }
+      todoCall('addFamilyTodo', famKey, text, $('famAddDate').value).then(function () {
+        $('famAddText').value = ''; $('famAddDate').value = '';
+      });
+    });
+    $('famAddText').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('famAddBtn').click(); });
+    $('famHideDone').addEventListener('change', function () {
+      try { localStorage.setItem('famHideDone', $('famHideDone').checked ? '1' : ''); } catch (err) { /* private mode */ }
+      renderTodos();
+    });
+    try { $('famHideDone').checked = localStorage.getItem('famHideDone') === '1'; } catch (err) { /* private mode */ }
+
+    function showTab(which) {
+      var todo = which === 'todo';
+      $('famTabTodo').setAttribute('aria-selected', todo ? 'true' : 'false');
+      $('famTabIdeas').setAttribute('aria-selected', todo ? 'false' : 'true');
+      $('famTodoView').classList.toggle('hidden', !todo);
+      $('famIdeasView').classList.toggle('hidden', todo);
+      try { localStorage.setItem('famTab', which); } catch (e) { /* private mode */ }
+    }
+    $('famTabIdeas').addEventListener('click', function () { showTab('ideas'); });
+    $('famTabTodo').addEventListener('click', function () { showTab('todo'); });
+
     famCall('getFamilyIdeas', famKey).then(function (res) {
       fam.groups = res.groups;
+      fam.todos = res.todos;
       $('famToggle').classList.remove('hidden');
       $('famPanel').classList.remove('hidden');
       render();
+      renderTodos();
+      var tab = null;
+      try { tab = localStorage.getItem('famTab'); } catch (e) { /* private mode */ }
+      showTab(tab === 'todo' ? 'todo' : 'ideas');
       var saved = null;
       try { saved = localStorage.getItem('famPanel'); } catch (e) { /* private mode */ }
       // Open straight away on a wide screen (it sits beside the invite); on a phone, wait for a tap.
@@ -1758,6 +1910,7 @@
       famCall('setFamilyGoing', famKey, fam.saving, going).then(function (res) {
         fam.saving = '';
         fam.groups = res.groups;
+        if (res.todos) fam.todos = res.todos;
         render();
         loadAvailability();   // that day now shows as Taken (or free again) on the supper calendar
       }, function (err) {
