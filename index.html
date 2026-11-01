@@ -366,6 +366,26 @@
   .wait-box .row-even { margin-bottom: 10px; }
   .wait-done { font-family: 'Cormorant Garamond', serif; font-size: 19px; color: var(--pine); margin: 0; }
 
+  /* ---------- join us on a day out ---------- */
+  .day.joinday { background: #dcefdf; border: 1.5px solid #4f7d5c; color: var(--pine); }
+  .day.joinday .tag { color: var(--pine); font-weight: 700; }
+  .day.joinday.selected { background: var(--pine); border-color: var(--pine); color: var(--cream); }
+  .day.joinday.selected .tag { color: var(--gold-light); }
+  .legend .joinus { background: #dcefdf; border: 1.5px solid #4f7d5c; }
+  .join-box { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: #fff; border: 1.5px solid var(--gold); }
+  .join-box .stay-q { color: var(--pine); }
+  .join-outing { display: flex; gap: 10px; align-items: flex-start; background: #fff7e0; border-radius: 10px; padding: 10px 12px; margin: 0 0 10px; }
+  .join-outing .e { font-size: 22px; line-height: 1; }
+  .join-outing b { color: var(--pine); display: block; }
+  .join-outing span { font-size: 13px; color: var(--muted); }
+  .join-outing a { font-size: 13px; color: var(--berry); font-weight: 700; }
+  .join-box .row-even { margin-bottom: 10px; }
+  .join-box textarea { width: 100%; min-height: 64px; margin-bottom: 10px; }
+  .join-box .join-phone { width: 100%; margin-bottom: 10px; }
+  .join-nums { display: flex; gap: 10px; margin-bottom: 10px; }
+  .join-nums label { flex: 1; font-size: 13px; color: var(--muted); margin: 0; }
+  .join-nums select { width: 100%; margin-top: 4px; }
+
   /* ---------- share ---------- */
   .share { text-align: center; color: var(--cream); margin: 4px 0 18px; }
   .share p { font-family: 'Cormorant Garamond', serif; font-size: 19px; margin: 0 0 10px; color: var(--gold-light); }
@@ -486,6 +506,8 @@
   .fam-badge.dog-no { background: #f6dcdc; color: #8e1b2c; }
   .fam-busy { font-size: 12px; color: #6b4e00; background: #fbf3dc; border-radius: 8px; padding: 5px 8px; margin-top: 8px; }
   .fam-check { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+  .fam-joiners { font-size: 12.5px; background: #e7f1e3; color: var(--pine); border-radius: 8px; padding: 6px 9px; margin-top: 8px; line-height: 1.5; }
+  .fam-joiners a { color: var(--berry); font-weight: 700; }
   .fam-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .fam-links a {
     font-size: 12.5px; font-weight: 700; text-decoration: none; padding: 6px 11px; border-radius: 999px;
@@ -562,6 +584,7 @@
         <span><i class="chosen"></i>Your choice</span>
         <span><i class="gone"></i>Already taken</span>
         <span><i class="wait"></i>Taken — tap to join the waiting list</span>
+        <span id="joinLegend" class="hidden"><i class="joinus"></i>We’re out for the day — tap to join us there</span>
       </div>
     </div>
     <div id="waitBox" class="wait-box hidden" role="region" aria-labelledby="waitTitle">
@@ -577,6 +600,27 @@
         <button class="btn-ghost" type="button" id="waitClose">Close</button>
       </div>
       <p id="waitDone" class="wait-done hidden"></p>
+    </div>
+    <div id="joinBox" class="join-box hidden" role="region" aria-labelledby="joinTitle">
+      <div class="stay-q" id="joinTitle"></div>
+      <p class="wait-note">We’re not hosting a supper that day — we’re off out! Fancy coming along? Leave your details and we’ll email you the time and where to meet.</p>
+      <div id="joinOutings"></div>
+      <div id="joinError" class="error hidden" role="alert"></div>
+      <div id="joinForm">
+        <div class="row-even">
+          <input id="jName" autocomplete="name" maxlength="80" placeholder="Your name" aria-label="Your name">
+          <input id="jEmail" type="email" autocomplete="email" maxlength="120" placeholder="Your email" aria-label="Your email">
+        </div>
+        <input id="jPhone" class="join-phone" type="tel" autocomplete="tel" maxlength="20" placeholder="Your mobile — so we can find each other on the day" aria-label="Your mobile">
+        <div class="join-nums">
+          <label>Adults <select id="jAdults"></select></label>
+          <label>Children <select id="jChildren"></select></label>
+        </div>
+        <textarea id="jMessage" maxlength="600" placeholder="Anything we should know? (optional)" aria-label="Message (optional)"></textarea>
+        <button class="btn btn-small" type="button" id="joinBtn">🎄 We’d love to join you</button>
+        <button class="btn-ghost" type="button" id="joinClose">Close</button>
+      </div>
+      <p id="joinDone" class="wait-done hidden"></p>
     </div>
     <div id="calClosed" class="closed hidden">
       <div class="big" aria-hidden="true">✨</div>
@@ -731,7 +775,7 @@
       <a class="pill" id="gcalBtn" href="#" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
       <a class="pill outline" id="icsBtn" href="#" download="christmas-supper.ics">🍎 Apple / Outlook calendar</a>
     </div>
-    <p class="fine">We’ll send you a reminder a couple of days before.</p>
+    <p class="fine">We’ll send you a reminder the day before.</p>
   </section>
 
   <div class="share">
@@ -786,12 +830,14 @@
       // Pretend: 5–7 Dec are too soon for a restaurant. Add #closed to the address to preview "closed".
       var taken = [1, 2, 3, 4, 9, 12, 18];
       var days = [];
-      for (var d = 1; d <= 23; d++) days.push({ day: d, available: taken.indexOf(d) === -1, past: false, restaurantOk: d > 7, waitable: d === 12 || d === 18 });
+      for (var d = 1; d <= 23; d++) days.push({ day: d, available: taken.indexOf(d) === -1 && d !== 19, past: false, restaurantOk: d > 7, waitable: d === 12 || d === 18,
+        join: d === 19 ? [{ title: 'Example light trail', place: 'A lovely garden', url: 'https://example.com', emoji: '💡', dogs: 'yes' }] : [] });
       return { year: 2026, hosts: 'The Warren Family', startLabel: '6pm', maxGuests: 12, noticeDays: 3,
         closed: location.hash === '#closed', pageUrl: 'https://script.google.com/macros/s/EXAMPLE/exec',
         whatToBring: 'Your favourite game! 🎲', days: days };
     },
     sendRegrets: function (f) { return { name: f.name }; },
+    joinOuting: function (f) { return { date: longDate(f.day) + ' 2026', titles: 'Example light trail', email: f.email }; },
     joinWaitlist: function (f) { return { date: longDate(f.day) + ' 2026' }; },
     // Pretend: Manchester/Leeds/Edinburgh-style postcodes are "far", everything else is close.
     getTravelInfo: function (pc) {
@@ -862,22 +908,24 @@
     }
     data.days.forEach(function (d) {
       var btn = document.createElement('button');
-      var wait = !d.available && d.waitable;
+      var join = !d.available && !d.past && d.join && d.join.length > 0;   // we're out for the day — come along!
+      var wait = !d.available && !join && d.waitable;
       btn.type = 'button';
-      btn.className = 'day' + (wait ? ' waitlist' : '') +
-        ((wait ? state.waitDay : state.selected) === d.day ? ' selected' : '');
-      btn.disabled = !d.available && !wait;
+      btn.className = 'day' + (wait ? ' waitlist' : '') + (join ? ' joinday' : '') +
+        ((join ? state.joinDay : wait ? state.waitDay : state.selected) === d.day ? ' selected' : '');
+      btn.disabled = !d.available && !wait && !join;
       btn.innerHTML = '<span class="num">' + d.day + '</span><span class="tag">' +
-        (d.available ? '<span class="from">from </span>' + data.startLabel : wait ? 'Waitlist' : (d.past ? 'Passed' : 'Taken')) + '</span>';
+        (d.available ? '<span class="from">from </span>' + data.startLabel : join ? 'Join us' : wait ? 'Waitlist' : (d.past ? 'Passed' : 'Taken')) + '</span>';
       btn.setAttribute('aria-label', longDate(d.day) +
-        (d.available ? ', available' : wait ? ', taken — join the waiting list' : ', not available'));
-      btn.addEventListener('click', function () { if (wait) openWaitlist(d.day); else choose(d.day); });
+        (d.available ? ', available' : join ? ', we’re out for the day — join us there' : wait ? ', taken — join the waiting list' : ', not available'));
+      btn.addEventListener('click', function () { if (join) openJoin(d); else if (wait) openWaitlist(d.day); else choose(d.day); });
       grid.appendChild(btn);
     });
   }
 
   // ---------- waiting list ----------
   function openWaitlist(day) {
+    if (state.joinDay) { state.joinDay = null; $('joinBox').classList.add('hidden'); }
     state.waitDay = day;
     renderCalendar();
     $('waitTitle').textContent = '⏳ ' + longDate(day) + ' is taken';
@@ -912,7 +960,61 @@
     }).then(function () { btn.disabled = false; });
   });
 
+  // ---------- join us on a day out ----------
+  function joinEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function openJoin(d) {
+    if (state.waitDay) { state.waitDay = null; $('waitBox').classList.add('hidden'); }
+    state.joinDay = d.day;
+    renderCalendar();
+    fillNumbers($('jAdults'), 1, state.data.maxGuests, 2);
+    fillNumbers($('jChildren'), 0, state.data.maxGuests - 1, 0);
+    $('joinTitle').textContent = '🎄 ' + longDate(d.day) + ' — we’re out for the day';
+    $('joinOutings').innerHTML = d.join.map(function (o) {
+      return '<div class="join-outing"><span class="e" aria-hidden="true">' + joinEsc(o.emoji) + '</span><div>' +
+        '<b>' + joinEsc(o.title) + '</b><span>' + joinEsc(o.place) + (o.dogs === 'yes' ? ' · 🐕 dog-friendly' : '') + '</span>' +
+        (o.url ? '<br><a href="' + joinEsc(o.url) + '" target="_blank" rel="noopener">Have a look ↗</a>' : '') +
+      '</div></div>';
+    }).join('');
+    $('joinError').classList.add('hidden');
+    $('joinDone').classList.add('hidden');
+    $('joinForm').classList.remove('hidden');
+    $('joinBox').classList.remove('hidden');
+    $('joinBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function closeJoin() {
+    state.joinDay = null;
+    $('joinBox').classList.add('hidden');
+    renderCalendar();
+  }
+  $('joinClose').addEventListener('click', closeJoin);
+  $('joinBtn').addEventListener('click', function () {
+    var f = { day: state.joinDay, name: $('jName').value.trim(), email: $('jEmail').value.trim(), phone: $('jPhone').value.trim(),
+      adults: $('jAdults').value, children: $('jChildren').value, message: $('jMessage').value.trim() };
+    var err = $('joinError');
+    err.classList.add('hidden');
+    var problem = !f.name ? 'Please tell us your name.'
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email) ? 'That email address doesn’t look quite right.'
+      : !validPhone(f.phone) ? 'Please add a mobile number so we can find each other on the day, e.g. 07700 900123.' : '';
+    if (problem) { err.textContent = problem; err.classList.remove('hidden'); return; }
+    var btn = $('joinBtn');
+    btn.disabled = true;
+    call('joinOuting', f).then(function (res) {
+      $('joinForm').classList.add('hidden');
+      $('joinDone').textContent = '🎉 Lovely! We’ve let them know you’d like to join us on ' + res.date +
+        '. We’ll email you at ' + res.email + ' with the time and where to meet.';
+      $('joinDone').classList.remove('hidden');
+    }).catch(function (e) {
+      err.textContent = cleanError(e);
+      err.classList.remove('hidden');
+    }).then(function () { btn.disabled = false; });
+  });
+
   function choose(day) {
+    if (state.joinDay) { state.joinDay = null; $('joinBox').classList.add('hidden'); }
     if (state.waitDay) { state.waitDay = null; $('waitBox').classList.add('hidden'); }
     state.selected = day;
     renderCalendar();
@@ -987,6 +1089,7 @@
         $('formCard').classList.add('hidden');
       }
       $('calLoading').classList.add('hidden');
+      $('joinLegend').classList.toggle('hidden', !data.days.some(function (d) { return d.join && d.join.length && !d.past; }));
 
       // After the last evening, or when every evening has gone, say so kindly instead of an empty calendar.
       var anyFree = data.days.some(function (d) { return d.available; });
@@ -1580,6 +1683,12 @@
         '</div>' +
         (it.check ? '<div class="fam-check">2026 details still to be confirmed — check the link before going.</div>' : '') +
         busy +
+        (it.going && it.joinable && !it.past ? '<div class="fam-check">Guests now see “Join us” on this day on the supper calendar.</div>' : '') +
+        ((it.joiners || []).length ? '<div class="fam-joiners">👥 <b>Joining you:</b>' + it.joiners.map(function (j) {
+          return '<div>' + esc(j.name) + ' (' + esc(j.party) + ') — ' +
+            (j.time ? 'meet ' + esc(j.time) + ' at ' + esc(j.where) + ' · <a href="' + esc(j.url) + '" target="_blank" rel="noopener">change</a>'
+                    : '<a href="' + esc(j.url) + '" target="_blank" rel="noopener">send them the meet-up time</a>') + '</div>';
+        }).join('') + '</div>' : '') +
         '<div class="fam-links">' + btn +
           (it.url ? '<a href="' + esc(it.url) + '" target="_blank" rel="noopener">Details & tickets ↗</a>' : '') +
         '</div>' +
@@ -1637,6 +1746,13 @@
       e.preventDefault();
       if (fam.saving) return;
       var going = a.getAttribute('data-going') === '1';
+      if (!going) {
+        var item = null;
+        fam.groups.forEach(function (g) { g.items.forEach(function (it) { if (it.id === a.getAttribute('data-id')) item = it; }); });
+        var n = item && item.joiners ? item.joiners.length : 0;
+        if (n && !confirm(item.joiners.map(function (j) { return j.name; }).join(' and ') + (n === 1 ? ' has' : ' have') +
+          ' asked to join you that day. Undoing will email ' + (n === 1 ? 'them' : 'each of them') + ' to say plans have changed. Go ahead?')) return;
+      }
       fam.saving = a.getAttribute('data-id');
       render();
       famCall('setFamilyGoing', famKey, fam.saving, going).then(function (res) {

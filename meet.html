@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<script src="shim.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Christmas Supper with the Warren Family">
+<meta property="og:description" content="Instead of presents this year, come and share a Christmas meal with us — pick your evening here.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meet-up time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Great+Vibes&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #1b3a28; --pine-deep: #10261a; --berry: #8e1b2c; --berry-soft: #b23a48;
+    --gold: #c9a44c; --gold-light: #f1d98f; --cream: #fbf6ec; --parchment: #f4ead6;
+    --ink: #2a2320; --muted: #6d5f55;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: 'Lato', system-ui, sans-serif; color: var(--ink);
+    background: radial-gradient(ellipse at 50% -10%, rgba(241,217,143,.18), transparent 55%),
+                linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 36px 16px 48px; }
+  header { text-align: center; color: var(--cream); margin-bottom: 22px; }
+  .eyebrow { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-light); }
+  h1 { font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(46px, 11vw, 68px); margin: 6px 0 0; line-height: 1; }
+  .card {
+    background: var(--cream); border-radius: 18px; padding: 26px 22px; border: 2px solid var(--gold);
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 0 0 6px var(--cream), inset 0 0 0 7px rgba(201,164,76,.45);
+  }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 15px; }
+  td { padding: 7px 0; vertical-align: top; border-bottom: 1px solid #ece2cc; }
+  td:first-child { color: var(--berry); font-weight: 700; width: 92px; padding-right: 12px; }
+  label { display: block; font-weight: 700; font-size: 14px; color: var(--pine); margin-bottom: 6px; }
+  label small { font-weight: 400; color: var(--muted); }
+  select, input[type="text"], textarea {
+    display: block; width: 100%; font: inherit; font-size: 16px; padding: 11px 12px; margin: 0 0 16px;
+    border-radius: 10px; border: 1.5px solid #d8c9a6; background: #fff; color: var(--ink);
+  }
+  textarea { min-height: 80px; resize: vertical; }
+  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--berry); box-shadow: 0 0 0 3px rgba(142,27,44,.15); }
+  .btn {
+    display: block; width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: 17px;
+    background: linear-gradient(180deg, var(--berry-soft), var(--berry)); color: var(--cream);
+    padding: 15px 20px; border-radius: 999px; box-shadow: 0 8px 18px rgba(142,27,44,.35);
+  }
+  .btn:disabled { opacity: .6; cursor: progress; }
+  .notice { background: var(--parchment); border: 1px dashed var(--gold); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 15px; }
+  .error { background: #fdecee; color: var(--berry); border: 1px solid #f0c2c8; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+  .loading, .done { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 21px; }
+  .done .big { font-size: 52px; }
+  .hint { font-size: 13px; color: var(--muted); margin: -8px 0 16px; }
+  @media (max-width: 520px) {
+    .wrap { padding: 24px 12px 40px; }
+    .card { padding: 20px 16px; }
+    td:first-child { width: 70px; }
+  }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div id="ctx" data-id="<?= joinId ?>" data-key="<?= key ?>" hidden></div>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Join us there</div>
+    <h1>Meet-up time</h1>
+  </header>
+
+  <section class="card">
+    <div id="loading" class="loading">Fetching the request…</div>
+    <div id="error" class="error hidden" role="alert"></div>
+
+    <div id="done" class="done hidden">
+      <div class="big" id="doneIcon" aria-hidden="true">🎉</div>
+      <p id="doneText"></p>
+      <p style="font-size:17px;color:var(--muted)" id="doneSub"></p>
+    </div>
+
+    <table id="details" class="hidden"></table>
+
+    <div id="form" class="hidden">
+      <div id="already" class="notice hidden"></div>
+      <label for="time">What time will you get there?</label>
+      <select id="time"></select>
+
+      <label for="where">Where shall you meet?</label>
+      <input id="where" type="text" maxlength="200" placeholder="e.g. the main entrance, or the café">
+      <p class="hint">They get a map link to this, so a place name or address works best.</p>
+
+      <label for="note">Anything else? <small>(optional — e.g. “we’ll be in the red coats”, parking tips)</small></label>
+      <textarea id="note" maxlength="500"></textarea>
+
+      <button class="btn" id="sendBtn" type="button"></button>
+    </div>
+  </section>
+</div>
+
+<script>
+  var ctx = document.getElementById('ctx').dataset;
+  // The GitHub copy of this page gets the request from its own link instead.
+  if (!ctx.id || ctx.id.indexOf('<?') === 0) {
+    var qs = new URLSearchParams(location.search);
+    ctx = { id: qs.get('meet') || '', key: qs.get('key') || '' };
+  }
+  var isLive = typeof google !== 'undefined' && google.script && google.script.run;
+
+  var mock = {
+    getJoinForMeet: function () {
+      return { name: 'Emma Price', email: 'emma@example.com', phone: '07700 900123', party: '2 adults and 1 child',
+        message: 'Can’t wait!', date: 'Saturday 19 December 2026', titles: 'Illuminated Palace light trail',
+        outings: [{ title: 'Illuminated Palace light trail', place: 'Bishop’s Palace & Gardens, Wells', when: 'Evening, until 8pm' }],
+        cancelled: '', meetTime: '', meetWhere: '', meetNote: '', confirmedAt: location.hash === '#again' ? '2 Dec 2026, 10:00' : '',
+        suggestedTime: '16:30', suggestedWhere: 'Bishop’s Palace & Gardens, Wells' };
+    },
+    confirmMeetup: function (id, key, d) {
+      return { name: 'Emma Price', email: 'emma@example.com', date: 'Saturday 19 December 2026', time: label12(+d.time.split(':')[0], +d.time.split(':')[1]),
+        where: d.where, updated: location.hash === '#again' };
+    }
+  };
+
+  function call(fn) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      if (!isLive) return setTimeout(function () { resolve(mock[fn].apply(null, args)); }, 400);
+      var runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+      runner[fn].apply(runner, args);
+    });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function cleanError(err) { return ((err && err.message) || String(err)).replace(/^(Exception|Error):\s*/i, ''); }
+  function showError(err) { $('loading').classList.add('hidden'); $('error').textContent = cleanError(err); $('error').classList.remove('hidden'); }
+  function finish(icon, text, sub) {
+    $('loading').classList.add('hidden'); $('form').classList.add('hidden');
+    $('doneIcon').textContent = icon; $('doneText').textContent = text; $('doneSub').textContent = sub;
+    $('done').classList.remove('hidden'); $('details').classList.remove('hidden');
+  }
+  function row(label, value) {
+    var tr = document.createElement('tr');
+    var a = document.createElement('td'); a.textContent = label;
+    var b = document.createElement('td'); b.textContent = value;
+    tr.appendChild(a); tr.appendChild(b); $('details').appendChild(tr);
+  }
+  function label12(h, m) { return (h > 12 ? h - 12 : h) + ':' + ('0' + m).slice(-2) + (h >= 12 ? 'pm' : 'am'); }
+
+  call('getJoinForMeet', ctx.id, ctx.key).then(function (j) {
+    var first = j.name.split(/\s+/)[0];
+    row('Guest', j.name + (j.phone ? ' · ' + j.phone : ''));
+    row('Date', j.date);
+    row('Day out', j.outings.length ? j.outings.map(function (o) { return o.title + ' — ' + o.place; }).join(' + ') : j.titles);
+    row('Party', j.party);
+    if (j.message) row('Message', j.message);
+    $('loading').classList.add('hidden');
+    $('details').classList.remove('hidden');
+
+    if (j.cancelled) {
+      return finish('🕯️', 'This request was cancelled on ' + j.cancelled + '.', 'Nothing was sent.');
+    }
+
+    // Meet-up times from 7am to 8:45pm, every 15 minutes.
+    var chosen = j.suggestedTime;
+    for (var h = 7; h <= 20; h++) {
+      [0, 15, 30, 45].forEach(function (m) {
+        var v = ('0' + h).slice(-2) + ':' + ('0' + m).slice(-2);
+        var o = document.createElement('option');
+        o.value = v; o.textContent = label12(h, m);
+        if (v === chosen) o.selected = true;
+        $('time').appendChild(o);
+      });
+    }
+    $('where').value = j.suggestedWhere;
+    $('note').value = j.meetNote || '';
+    if (j.confirmedAt) {
+      $('already').textContent = 'You sent ' + first + ' the meet-up time on ' + j.confirmedAt +
+        (j.meetTime ? ' (' + label12(+j.meetTime.split(':')[0], +j.meetTime.split(':')[1]) + ' at ' + j.meetWhere + ')' : '') +
+        '. Sending again emails them the new details.';
+      $('already').classList.remove('hidden');
+      $('sendBtn').textContent = '✉️ Send ' + first + ' the new time';
+    } else {
+      $('sendBtn').textContent = '✅ Send ' + first + ' the meet-up time';
+    }
+    $('form').classList.remove('hidden');
+
+    $('sendBtn').addEventListener('click', function () {
+      var btn = $('sendBtn');
+      var label = btn.textContent;
+      if (!$('where').value.trim()) { showError('Please say where you’ll meet.'); return; }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      $('error').classList.add('hidden');
+      call('confirmMeetup', ctx.id, ctx.key, { time: $('time').value, where: $('where').value.trim(), note: $('note').value.trim() })
+        .then(function (res) {
+          finish('🎉', (res.updated ? 'Update sent! ' : 'All sorted! ') + 'Meeting ' + first + ' at ' + res.time + ' — ' + res.where + '.',
+            first + ' has been emailed at ' + res.email + ', and it’s in your calendar notes for ' + res.date +
+            '. They’ll get a reminder the day before. You can close this page.');
+        }).catch(function (err) {
+          showError(err);
+          btn.disabled = false;
+          btn.textContent = label;
+        });
+    });
+  }).catch(showError);
+</script>
+</body>
+</html>
