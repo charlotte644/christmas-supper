@@ -432,6 +432,77 @@
     .music-icon { width: 36px; height: 36px; font-size: 18px; }
   }
 
+  /* ---------- private "things to do" panel (only with your secret ?family= link) ---------- */
+  .fam-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 30; display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 999px; border: 1px solid var(--gold); cursor: pointer;
+    background: var(--berry); color: var(--cream); font: 700 14px 'Lato', sans-serif;
+    box-shadow: 0 6px 18px rgba(0,0,0,.3);
+  }
+  .fam-toggle:hover { background: var(--berry-soft); }
+  .fam-panel {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 40; width: 400px; max-width: 100%;
+    background: var(--cream); color: var(--ink); box-shadow: -10px 0 30px rgba(0,0,0,.35);
+    display: flex; flex-direction: column; transform: translateX(105%); transition: transform .3s ease;
+  }
+  .fam-panel.open { transform: none; }
+  @media (prefers-reduced-motion: reduce) { .fam-panel { transition: none; } }
+  .fam-head {
+    display: flex; gap: 10px; align-items: flex-start; padding: 18px 18px 12px;
+    background: linear-gradient(180deg, var(--pine) 0%, var(--pine-deep) 100%); color: var(--cream);
+  }
+  .fam-head h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 2px 0 4px; color: var(--gold-light); }
+  .fam-head p { margin: 0; font-size: 13px; color: rgba(251,246,236,.85); line-height: 1.45; }
+  .fam-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .fam-close {
+    margin-left: auto; flex: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+    border: 1px solid rgba(241,217,143,.5); background: transparent; color: var(--cream); font-size: 20px; line-height: 1;
+  }
+  .fam-filters { display: flex; gap: 6px; padding: 10px 14px; overflow-x: auto; border-bottom: 1px solid var(--taken); scrollbar-width: none; }
+  .fam-filters::-webkit-scrollbar { display: none; }
+  .fam-chip {
+    flex: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--taken); background: #fff;
+    font: 700 12px 'Lato', sans-serif; color: var(--pine); cursor: pointer;
+  }
+  .fam-chip[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--cream); }
+  .fam-list { flex: 1; overflow-y: auto; padding: 4px 14px 28px; -webkit-overflow-scrolling: touch; }
+  .fam-group h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 21px; color: var(--berry); margin: 18px 0 2px;
+  }
+  .fam-group .fam-note { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
+  .fam-item { background: #fff; border: 1px solid var(--taken); border-radius: 14px; padding: 12px 13px; margin: 8px 0; }
+  .fam-item.weekday { border-left: 4px solid var(--gold); }
+  .fam-item.past { opacity: .5; }
+  .fam-top { display: flex; gap: 10px; align-items: flex-start; }
+  .fam-emoji { font-size: 24px; line-height: 1; flex: none; margin-top: 2px; }
+  .fam-title { font-weight: 700; font-size: 15px; color: var(--pine); margin: 0; }
+  .fam-when { font-size: 12.5px; color: var(--berry); font-weight: 700; margin: 2px 0 0; }
+  .fam-meta { font-size: 13px; color: var(--ink); margin: 6px 0 0; line-height: 1.45; }
+  .fam-meta b { color: var(--pine); }
+  .fam-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .fam-badge { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--parchment); color: var(--ink); }
+  .fam-badge.dog-yes { background: #dcefdf; color: #1d5a2c; }
+  .fam-badge.dog-some { background: #f7ecc9; color: #6b4e00; }
+  .fam-badge.dog-no { background: #f6dcdc; color: #8e1b2c; }
+  .fam-busy { font-size: 12px; color: #6b4e00; background: #fbf3dc; border-radius: 8px; padding: 5px 8px; margin-top: 8px; }
+  .fam-check { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 6px; }
+  .fam-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .fam-links a {
+    font-size: 12.5px; font-weight: 700; text-decoration: none; padding: 6px 11px; border-radius: 999px;
+    border: 1px solid var(--pine); color: var(--pine);
+  }
+  .fam-links a.primary { background: var(--pine); color: var(--cream); }
+  .fam-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 30px 10px; }
+  .fam-foot { font-size: 11.5px; color: var(--muted); text-align: center; margin: 18px 0 0; line-height: 1.5; }
+  /* wide screens: the panel sits beside the invite instead of over it */
+  @media (min-width: 1200px) {
+    body.fam-open .wrap { margin-right: calc(400px + max(16px, (100vw - 400px - 760px) / 2)); }
+  }
+  @media (max-width: 520px) {
+    .fam-toggle { top: auto; bottom: 12px; right: auto; left: 12px; padding: 10px 14px; }
+    .fam-panel { width: 100%; }
+  }
+
   .hidden { display: none !important; }
 </style>
 </head>
@@ -682,6 +753,29 @@
   </span>
 </button>
 <audio id="music" preload="none"></audio>
+
+<!-- Private: only appears when the page is opened with your secret ?family= link -->
+<button type="button" class="fam-toggle hidden" id="famToggle" aria-controls="famPanel" aria-expanded="false">
+  🎄 <span>Things to do</span>
+</button>
+<aside class="fam-panel hidden" id="famPanel" aria-label="Christmassy things to do">
+  <div class="fam-head">
+    <div>
+      <div class="fam-eyebrow">Just for us</div>
+      <h2>Christmassy things to do</h2>
+      <p>Days out for the four of us (dog included!) on the weekends we’re free, plus a few weekday treats.
+        Press <b>We’re going</b> and it goes in the calendar.</p>
+    </div>
+    <button type="button" class="fam-close" id="famClose" aria-label="Close">×</button>
+  </div>
+  <div class="fam-filters" role="group" aria-label="Show">
+    <button type="button" class="fam-chip" data-filter="all" aria-pressed="true">All</button>
+    <button type="button" class="fam-chip" data-filter="dogs" aria-pressed="false">🐕 Dog friendly</button>
+    <button type="button" class="fam-chip" data-filter="going" aria-pressed="false">✅ We’re going</button>
+    <button type="button" class="fam-chip" data-filter="free" aria-pressed="false">£0 Free</button>
+  </div>
+  <div class="fam-list" id="famList"><p class="fam-empty">Loading ideas…</p></div>
+</aside>
 
 <script>
   // ---------- talking to Google (or a pretend version when previewed outside Apps Script) ----------
@@ -1404,6 +1498,7 @@
     $('musicIcon').textContent = '🔇';
   } else {
     var firstTouch = function (e) {
+      if ($('famPanel').contains(e.target) || $('famToggle').contains(e.target)) return;  // private panel stays quiet
       document.removeEventListener('pointerdown', firstTouch, true);
       document.removeEventListener('keydown', firstTouch, true);
       if ($('musicBtn').contains(e.target)) return;   // the button's own click handles that
@@ -1414,6 +1509,148 @@
   }
 
   loadAvailability();
+
+  // ---------- private "things to do" panel ----------
+  // Only with your secret link (…?family=<key>). The ideas come from the script, which checks the key,
+  // so nothing about them is in this page for anyone else to find.
+  (function () {
+    var famKey = new URLSearchParams(location.search).get('family');
+    if (!famKey) return;
+    var fam = { groups: [], filter: 'all', saving: '' };
+
+    var mockIdeas = {
+      groups: [
+        { title: 'Example weekend', note: 'Sample ideas for previewing the panel — the real ones come from the script.', items: [
+          { id: 'demo1', date: '2026-11-07', day: 'Sat 7 Nov', emoji: '🌲', title: 'Example forest walk with Santa’s mailbox',
+            place: 'Somewhere nice', drive: '25 min', when: '10am–4pm', price: 'Free (parking £4)', dogs: 'yes', dogNote: 'On leads',
+            toddler: 'Buggy-friendly path', url: 'https://example.com', busy: ['5:00pm Example plan'] },
+          { id: 'demo2', date: '2026-11-08', day: 'Sun 8 Nov', emoji: '🚂', title: 'Example Santa train',
+            place: 'A railway', drive: '30 min', when: '11am', start: '11:00', end: '13:00', price: '£15 adult · £12 child · under-2s free',
+            dogs: 'no', dogNote: 'No dogs on board', toddler: 'Gift for under-2s too', url: 'https://example.com', check: true, going: true }
+        ] }
+      ]
+    };
+
+    function famCall(fn) {
+      var args = Array.prototype.slice.call(arguments, 1);
+      return new Promise(function (resolve, reject) {
+        if (!isLive) {
+          if (fn === 'setFamilyGoing') mockIdeas.groups.forEach(function (g) { g.items.forEach(function (it) { if (it.id === args[1]) it.going = args[2]; }); });
+          return setTimeout(function () { resolve(JSON.parse(JSON.stringify(mockIdeas))); }, 400);
+        }
+        var run = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+        run[fn].apply(run, args);
+      });
+    }
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function shows(it) {
+      if (fam.filter === 'dogs') return it.dogs === 'yes' || it.dogs === 'some';
+      if (fam.filter === 'going') return !!it.going;
+      if (fam.filter === 'free') return /^free/i.test(it.price || '');
+      return true;
+    }
+
+    var dogLabel = { yes: '🐕 Dogs welcome', some: '🐕 Dogs in some areas', no: '🚫 No dogs' };
+
+    function itemHtml(it) {
+      var weekday = !/^(Sat|Sun)/.test(it.day || '');
+      var busy = (it.busy || []).length
+        ? '<div class="fam-busy">📅 Already in your calendar that day: ' + it.busy.map(esc).join(' · ') + '</div>' : '';
+      var btn = it.past ? '' : it.going
+        ? '<a href="#" class="primary" data-going="0" data-id="' + esc(it.id) + '">✅ We’re going — undo</a>'
+        : '<a href="#" data-going="1" data-id="' + esc(it.id) + '">🎄 We’re going</a>';
+      if (fam.saving === it.id) btn = '<a href="#" aria-disabled="true">Saving…</a>';
+      return '<article class="fam-item' + (weekday ? ' weekday' : '') + (it.past ? ' past' : '') + '">' +
+        '<div class="fam-top"><span class="fam-emoji" aria-hidden="true">' + esc(it.emoji || '🎄') + '</span><div>' +
+          '<p class="fam-title">' + esc(it.title) + '</p>' +
+          '<p class="fam-when">' + esc(it.day) + (it.when ? ' · ' + esc(it.when) : '') + (weekday ? ' · weekday' : '') + '</p>' +
+        '</div></div>' +
+        '<p class="fam-meta">📍 ' + esc(it.place) + (it.drive ? ' · 🚗 ' + esc(it.drive) : '') + '<br>' +
+          '<b>💷 ' + esc(it.price || 'Price not published yet') + '</b>' +
+          (it.toddler ? '<br>👶 ' + esc(it.toddler) : '') + '</p>' +
+        '<div class="fam-badges">' +
+          (it.dogs ? '<span class="fam-badge dog-' + esc(it.dogs) + '">' + esc(dogLabel[it.dogs] || '') + '</span>' : '') +
+          (it.dogNote ? '<span class="fam-badge">' + esc(it.dogNote) + '</span>' : '') +
+        '</div>' +
+        (it.check ? '<div class="fam-check">2026 details still to be confirmed — check the link before going.</div>' : '') +
+        busy +
+        '<div class="fam-links">' + btn +
+          (it.url ? '<a href="' + esc(it.url) + '" target="_blank" rel="noopener">Details & tickets ↗</a>' : '') +
+        '</div>' +
+      '</article>';
+    }
+
+    function render() {
+      var html = fam.groups.map(function (g) {
+        var items = g.items.filter(shows);
+        if (!items.length) return '';
+        return '<section class="fam-group"><h3>' + esc(g.title) + '</h3>' +
+          (g.note ? '<p class="fam-note">' + esc(g.note) + '</p>' : '') +
+          items.map(itemHtml).join('') + '</section>';
+      }).join('');
+      $('famList').innerHTML = (html || '<p class="fam-empty">Nothing here yet.</p>') +
+        '<p class="fam-foot">Prices and dog rules are from each venue’s website — worth a quick check before you set off.<br>' +
+        'Gold edge = a weekday idea.</p>';
+    }
+
+    function setOpen(open) {
+      $('famPanel').classList.toggle('open', open);
+      $('famToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.classList.toggle('fam-open', open);
+      try { localStorage.setItem('famPanel', open ? 'open' : 'closed'); } catch (e) { /* private mode */ }
+    }
+
+    famCall('getFamilyIdeas', famKey).then(function (res) {
+      fam.groups = res.groups;
+      $('famToggle').classList.remove('hidden');
+      $('famPanel').classList.remove('hidden');
+      render();
+      var saved = null;
+      try { saved = localStorage.getItem('famPanel'); } catch (e) { /* private mode */ }
+      // Open straight away on a wide screen (it sits beside the invite); on a phone, wait for a tap.
+      setTimeout(function () { setOpen(saved ? saved === 'open' : window.innerWidth >= 1200); }, 50);
+    }, function () { /* wrong or old link: show nothing at all */ });
+
+    $('famToggle').addEventListener('click', function () { setOpen(!$('famPanel').classList.contains('open')); });
+    $('famClose').addEventListener('click', function () { setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.fam-chip'), function (chip) {
+      chip.addEventListener('click', function () {
+        fam.filter = chip.getAttribute('data-filter');
+        Array.prototype.forEach.call(document.querySelectorAll('.fam-chip'), function (c) {
+          c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
+        });
+        render();
+      });
+    });
+
+    $('famList').addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-id]');
+      if (!a) return;
+      e.preventDefault();
+      if (fam.saving) return;
+      var going = a.getAttribute('data-going') === '1';
+      fam.saving = a.getAttribute('data-id');
+      render();
+      famCall('setFamilyGoing', famKey, fam.saving, going).then(function (res) {
+        fam.saving = '';
+        fam.groups = res.groups;
+        render();
+        loadAvailability();   // that day now shows as Taken (or free again) on the supper calendar
+      }, function (err) {
+        fam.saving = '';
+        render();
+        alert('Sorry — that didn’t save: ' + cleanError(err));
+      });
+    });
+  })();
 </script>
 </body>
 </html>
